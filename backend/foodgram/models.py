@@ -5,8 +5,15 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Tag(models.Models):
-    pass
+class Tag(models.Model):
+    name = models.CharField(
+        max_length=200,
+        unique=True,
+        verbose_name="Название тега",
+    )
+
+    slug = models.SlugField(max_length=200, unique=True, verbose_name="Слаг")
+
 
 class Ingredient(models.Model):
     name = models.CharField(
@@ -30,22 +37,22 @@ class Recipe(models.Model):
         related_name="recipes",
         verbose_name="Автор",
     )
+    tags = models.ManyToManyField(
+        Tag, through="TagsInRecipe", related_name="recipes"
+    )
+    name = models.CharField(max_length=200, verbose_name="Название")
+    text = models.TextField(verbose_name="Описание")
+    cooking_time = models.PositiveSmallIntegerField()
     ingredients = models.ManyToManyField(
         Ingredient,
         through="IngredientInRecipe",
         related_name="recipes",
         blank=True,
     )
-    tags = models.ManyToManyField(
-        Tag, through="TagsInRecipe", related_name="recipes"
-    )
-    image = models.ImageField()
-    name = models.CharField(max_length=200, verbose_name="Название")
-    text = models.TextField(verbose_name="Описание")
-    cooking_time = models.PositiveSmallIntegerField()
     pub_date = models.DateTimeField(
         auto_now_add=True, verbose_name="Время публикации"
     )
+    image = models.ImageField()
 
     class Meta:
         ordering = ["-pub_date"]
