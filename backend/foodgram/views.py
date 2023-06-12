@@ -26,8 +26,6 @@ class IngredientsView(viewsets.ModelViewSet):
     queryset = models.Ingredient.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = serializers.IngredientSerializer
-    filter_backends = [DjangoFilterBackend, ]
-    filter_class = IngredientFilter
     search_fields = ["name", ]
     pagination_class = None
 
@@ -35,8 +33,6 @@ class IngredientsView(viewsets.ModelViewSet):
 class RecipeView(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
     permissions = [IsAuthenticatedOrReadOnly, ]
-    filter_backends = [DjangoFilterBackend, ]
-    filter_class = RecipeFilter
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):

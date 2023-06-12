@@ -109,10 +109,10 @@ class Favorite(models.Model):
         verbose_name="Пользователь",
         related_name="favorite",
     )
-    when_added = models.DateTimeField(auto_now_add=True)
+    time_oclock = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-when_added"]
+        ordering = ["-time_oclock"]
         verbose_name = "Список покупок"
         verbose_name_plural = verbose_name
         unique_together = ("user", "recipe")
@@ -134,10 +134,10 @@ class ShoppingCart(models.Model):
         verbose_name="Пользователь",
         related_name="shopping_cart",
     )
-    when_added = models.DateTimeField(auto_now_add=True)
+    time_oclock = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-when_added"]
+        ordering = ["-time_oclock"]
         verbose_name = "Список покупок"
         verbose_name_plural = verbose_name
         unique_together = ("user", "recipe")
