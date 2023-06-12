@@ -94,3 +94,53 @@ class IngredientInRecipe(models.Model):
     class Meta:
         verbose_name = "Количество ингредиента в рецепте"
         verbose_name_plural = verbose_name
+
+
+class Favorite(models.Model):
+    recipe = models.ForeignKey(
+        Recipe,
+        related_name="favorite",
+        on_delete=models.CASCADE,
+        verbose_name="Рецепт",
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="favorite",
+    )
+    when_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-when_added"]
+        verbose_name = "Список покупок"
+        verbose_name_plural = verbose_name
+        unique_together = ("user", "recipe")
+
+    def __str__(self):
+        return f"{self.user} added {self.recipe}"
+
+
+class ShoppingCart(models.Model):
+    recipe = models.ForeignKey(
+        Recipe,
+        related_name="shopping_cart",
+        on_delete=models.CASCADE,
+        verbose_name="Рецепт",
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="shopping_cart",
+    )
+    when_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-when_added"]
+        verbose_name = "Список покупок"
+        verbose_name_plural = verbose_name
+        unique_together = ("user", "recipe")
+
+    def __str__(self):
+        return f"{self.user} added {self.recipe}"
