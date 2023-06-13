@@ -140,7 +140,12 @@ class ShoppingCart(models.Model):
         ordering = ["-time_oclock"]
         verbose_name = "Список покупок"
         verbose_name_plural = verbose_name
-        unique_together = ("user", "recipe")
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe']
+            )
+        ]
+        # unique_together = ("user", "recipe")
 
     def __str__(self):
         return f"{self.user} added {self.recipe}"

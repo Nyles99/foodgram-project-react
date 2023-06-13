@@ -7,10 +7,26 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ("username",)
 
-    email = models.EmailField(max_length=200, unique=True)
-    username = models.CharField(max_length=200, unique=True)
-    first_name = models.CharField(max_length=200, blank=True)
-    last_name = models.CharField(max_length=200, blank=True)
+    email = models.EmailField(
+        max_length=200,
+        unique=True,
+        verbose_name="Почта"
+    )
+    username = models.CharField(
+        max_length=200,
+        unique=True,
+        verbose_name='Логин'
+    )
+    first_name = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name='Имя'
+    )
+    last_name = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name='Фамилия'
+    )
 
 
 class Follow(models.Model):
@@ -22,4 +38,11 @@ class Follow(models.Model):
     )
 
     class Meta:
-        unique_together = ("user", "following")
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'following']
+            )
+        ]
+        # unique_together = ("user", "following")
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
