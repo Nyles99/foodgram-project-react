@@ -12,7 +12,6 @@ from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
 
 from . import models, serializers
-from .filters import IngredientFilter, RecipeFilter
 
 
 class TagView(viewsets.ModelViewSet):
@@ -143,8 +142,7 @@ class ShoppingCartViewSet(APIView):
 
 @api_view(["GET"])
 def download_shopping_cart(request):
-    """Формирует текстовый файл со списком покупок ингредиентов
-    для приготовления рецептов из ShoppingCart"""
+    """Формирует текстовый файл ингредиентов из ShoppingCart"""
 
     user = request.user
     shopping_cart = user.shopping_cart.all()
