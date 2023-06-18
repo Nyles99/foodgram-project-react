@@ -43,6 +43,5 @@ class Follow(models.Model):
                 fields=['user', 'following']
             )
         ]
-        # unique_together = ("user", "following")
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"

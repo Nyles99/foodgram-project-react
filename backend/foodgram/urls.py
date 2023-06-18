@@ -4,17 +4,17 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (
     FavoriteView,
-    IngredientsView,
-    RecipeView,
-    ShoppingCartViewSet,
-    TagView,
+    IngredientsViewSet,
+    RecipeViewSet,
+    ShoppingCartView,
+    TagViewSet,
     download_shopping_cart,
 )
 
 router = DefaultRouter()
-router.register(r"tags", TagView, basename="tags")
-router.register(r"ingredients", IngredientsView, basename="ingredients")
-router.register(r"recipes", RecipeView, basename="recipes")
+router.register(r"tags", TagViewSet, basename="tags")
+router.register(r"ingredients", IngredientsViewSet, basename="ingredients")
+router.register(r"recipes", RecipeViewSet, basename="recipes")
 
 urlpatterns = [
     path(
@@ -28,7 +28,7 @@ urlpatterns = [
     ),
     path(
         "recipes/<int:recipe_id>/shopping_cart/",
-        ShoppingCartViewSet.as_view(),
+        ShoppingCartView.as_view(),
     ),
     path("", include(router.urls)),
 ]

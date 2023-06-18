@@ -59,17 +59,16 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             user.set_password(serializer.validated_data["new_password"])
             user.save()
             return Response({"status": "password set"})
-        else:
-            return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
-            )
+        return Response(
+            serializer.errors, status=status.HTTP_400_BAD_REQUEST
+        )
 
     @action(
         methods=["get", "delete", "post"],
         detail=True,
         permission_classes=[IsAuthenticated],
     )
-    # Взято  c yatube
+    
     def subscribe(self, request, pk=None):
         user = request.user
         following = get_object_or_404(User, pk=pk)

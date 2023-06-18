@@ -4,10 +4,15 @@ from django.contrib.admin import register
 from . import models
 
 
-admin.site.register(models.Follow)
+@admin.register(models.Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'user', 'following')
+    search_fields = ('user', 'following')
+    list_filter = ('user', 'following')
 
 
 @register(models.User)
 class UserAdmin(admin.ModelAdmin):
-    fields = ("username", "first_name", "last_name", "email")
-    search_fields = ("username")
+    list_display = ('pk', 'email', 'username', 'first_name', 'last_name')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
+    list_filter = ('username', 'email')

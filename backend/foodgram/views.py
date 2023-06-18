@@ -1,4 +1,3 @@
-# from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from rest_framework import viewsets, status
@@ -14,14 +13,14 @@ from rest_framework.views import APIView
 from . import models, serializers
 
 
-class TagView(viewsets.ModelViewSet):
+class TagViewSet(viewsets.ModelViewSet):
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSerializer
     permissions = [AllowAny, ]
     pagination_class = None
 
 
-class IngredientsView(viewsets.ModelViewSet):
+class IngredientsViewSet(viewsets.ModelViewSet):
     queryset = models.Ingredient.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = serializers.IngredientSerializer
@@ -29,7 +28,7 @@ class IngredientsView(viewsets.ModelViewSet):
     pagination_class = None
 
 
-class RecipeView(viewsets.ModelViewSet):
+class RecipeViewSet(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
     permissions = [IsAuthenticatedOrReadOnly, ]
     pagination_class = PageNumberPagination
@@ -92,7 +91,7 @@ class FavoriteView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ShoppingCartViewSet(APIView):
+class ShoppingCartView(APIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
@@ -160,7 +159,7 @@ def download_shopping_cart(request):
                     "quantity": quantity,
                 }
             else:
-                buying_list[name]["quantityt"] = (
+                buying_list[name]["quantity"] = (
                     buying_list[name]["quantity"] + quantity
                 )
     wishlist = []

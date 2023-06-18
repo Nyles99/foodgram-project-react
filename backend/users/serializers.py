@@ -1,9 +1,12 @@
+import re
+import statistics
 from django.contrib.auth import get_user_model
+from requests import Response
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.authtoken.models import Token
 
-from . import models
+from .models import Follow
 from foodgram.models import Recipe
 
 
@@ -14,6 +17,25 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email", "first_name", "last_name"]
+
+    def validate_email(email):
+        email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+        if re.match(email_regex, email):
+            return True
+        else:
+            return False
+
+    def clean_email(self):
+        cleaned_email = super().clean_email(self)
+        if User.objects.filter(email=cleaned_email.get('email')).exists():
+            self.fields.add_error('email', "Эта почта уже зарегистрированна")
+        return cleaned_email
+    
+    def clean_username(self):
+        cleaned_name = super().clean_email(self)
+        if User.objects.filter(email=cleaned_name.get('username')).exists():
+            self.fields.add_error('username', "Этот логин уже зарегистрирован")
+        return cleaned_name
 
 
 class PasswordSerializer(serializers.Serializer):
@@ -46,11 +68,18 @@ class TokenSerializer(serializers.ModelSerializer):
 
 class FollowerSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
-        queryset=models.User.objects.all()
+        queryset=User.objects.all()
     )
     following = serializers.PrimaryKeyRelatedField(
-        queryset=models.User.objects.all()
+        queryset=User.objects.all()
     )
+
+    def resubscribe(self, request):
+        if request.method == "GET" or request.method == "POST": 
+            if Follow.exists(): 
+                return Response( 
+                    "Вы уже подписаны", status=statistics.HTTP_400_BAD_REQUEST 
+                )
 
     def validate(self, data):
         user = data.get("user")
@@ -61,10 +90,10 @@ class FollowerSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ("user", "following")
-        model = models.Follow
+        model = Follow
         validators = [
             UniqueTogetherValidator(
-                queryset=models.Follow.objects.all(),
+                queryset=Follow.objects.all(),
                 fields=["user", "following"],
             )
         ]
@@ -89,12 +118,9 @@ class ShowFollowerSerializer(serializers.ModelSerializer):
         ]
 
     def check_if_is_subscribed(self, obj):
-        request = self.context.get("request")
-        if request is None or request.user.is_anonymous:
-            return False
-        return models.Follow.objects.filter(
-            user=request.user, following=obj
-        ).exists()
+        user = self.context.get('request').user
+        return user.is_authenticated and Follow.objects.filter(
+            user=user, following=obj).exists()
 
     def get_recipes_count(self, obj):
         count = obj.recipes.all().count()
