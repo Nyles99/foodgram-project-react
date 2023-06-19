@@ -154,10 +154,10 @@ class Favorite(models.Model):
         verbose_name="Пользователь",
         related_name="favorite",
     )
-    time_oclock = models.DateTimeField(auto_now_add=True)
+    cooking_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ("-time_oclock")
+        ordering = ("-cooking_time")
         verbose_name = "Список покупок"
         verbose_name_plural = verbose_name
         unique_together = ("user", "recipe")
@@ -182,7 +182,7 @@ class ShoppingCart(models.Model):
     time_oclock = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ("-time_oclock")
+        ordering = ("-cooking_time")
         verbose_name = "Список покупок"
         verbose_name_plural = verbose_name
         constraints = [

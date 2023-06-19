@@ -1,4 +1,5 @@
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -113,6 +114,31 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         if data <= 0:
             raise serializers.ValidationError("Введите число больше 0")
         return data
+
+    def validate_tags(self, value):
+        if not value:
+            raise ValidationError('Добавьте тег.')
+        return value
+
+    def validate_ingredients(self, value):
+        '''Валидатор ингредиентов'''
+        ingredients = value
+        if not ingredients:
+            raise ValidationError({
+                'ingredients': 'Добавьте хотя бы один ингредиент!'
+            })
+        ingredients_list = []
+        for item in ingredients:
+            if item['id'] in ingredients_list:
+                raise ValidationError({
+                    'ingredients': 'Ингредиенты не должны дублироваться!'
+                })
+            if int(item['quantity']) <= 0:
+                raise ValidationError({
+                    'quantity': 'Количество должно быть больше нуля!'
+                })
+            ingredients_list.append(item['id'])
+        return value
 
     def create(self, validated_data):
         author = self.context.get('request').user
