@@ -76,9 +76,9 @@ class FollowerSerializer(serializers.ModelSerializer):
 
     def resubscribe(self, request):
         if request.method == "GET" or request.method == "POST":
-            if Follow.exists(): 
-                return Response( 
-                    "Вы уже подписаны", status=statistics.HTTP_400_BAD_REQUEST 
+            if Follow.exists():
+                return Response(
+                    "Вы уже подписаны", status=statistics.HTTP_400_BAD_REQUEST
                 )
 
     def validate(self, data):
