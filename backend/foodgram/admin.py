@@ -3,10 +3,6 @@ from django.contrib import admin
 
 from . import models
 
-admin.site.register(models.Tag)
-admin.site.register(models.Ingredient)
-admin.site.register(models.Favorite)
-admin.site.register(models.ShoppingCart)
 
 @admin.register(models.Tag)
 class TagAdmin(admin.ModelAdmin):
@@ -26,7 +22,6 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class IngredientsInLine(admin.TabularInline):
     model = models.Recipe.ingredients.through
-
 
 
 @admin.register(models.Recipe)
@@ -55,4 +50,4 @@ class FavoriteAdmin(admin.ModelAdmin):
 @admin.register(models.ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'recipe')
-    search_fields = ('user', 'recipe')  
+    search_fields = ('user', 'recipe')

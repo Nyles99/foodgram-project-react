@@ -30,7 +30,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         if User.objects.filter(email=cleaned_email.get('email')).exists():
             self.fields.add_error('email', "Эта почта уже зарегистрированна")
         return cleaned_email
-    
+
     def clean_username(self):
         cleaned_name = super().clean_email(self)
         if User.objects.filter(email=cleaned_name.get('username')).exists():
@@ -75,7 +75,7 @@ class FollowerSerializer(serializers.ModelSerializer):
     )
 
     def resubscribe(self, request):
-        if request.method == "GET" or request.method == "POST": 
+        if request.method == "GET" or request.method == "POST":
             if Follow.exists(): 
                 return Response( 
                     "Вы уже подписаны", status=statistics.HTTP_400_BAD_REQUEST 

@@ -3,7 +3,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import (Favorite, Ingredient, Recipe, ShoppingCart, 
+from .models import (Favorite, Ingredient, Recipe, ShoppingCart,
                      Tag, IngredientInRecipe, TagsInRecipe, User)
 from users.serializers import CustomUserSerializer
 
@@ -155,7 +155,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             ))
         IngredientInRecipe.objects.bulk_create(recipe_ingredients)
         return recipe
-        
 
     def update(self, instance, validated_data):
         ingredients = validated_data.pop("ingredients")
