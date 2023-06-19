@@ -68,7 +68,6 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         detail=True,
         permission_classes=[IsAuthenticated],
     )
-
     def subscribe(self, request, pk=None):
         user = request.user
         following = get_object_or_404(User, pk=pk)
