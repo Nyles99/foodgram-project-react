@@ -22,8 +22,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         if re.match(email_regex, email):
             return True
-        else:
-            return False
+        return False
 
     def clean_email(self):
         cleaned_email = super().clean_email(self)

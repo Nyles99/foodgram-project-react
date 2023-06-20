@@ -23,16 +23,7 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(
-        source='ingredient.id',
-    )
-    name = serializers.ReadOnlyField(
-        source='ingredient.name',
-    )
-    measurement_unit = serializers.ReadOnlyField(
-        source='ingredient.measurement_unit',
-    )
-
+    
     class Meta:
         model = Ingredient
         fields = ("id", "name", "measurement_unit")
@@ -112,7 +103,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     def validate_cooking_time(self, data):
         if data <= 0:
-            raise serializers.ValidationError("Введите число больше 0")
+            raise serializers.ValidationError(
+                "Время пригтовления должно быть больше нуля"
+            )
         return data
 
     def validate_tags(self, value):
@@ -131,11 +124,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         for item in ingredients:
             if item['id'] in ingredients_list:
                 raise ValidationError({
-                    'ingredients': 'Ингредиенты не должны дублироваться!'
+                    'ingredients': (
+                        'Кол-во ингредиентов не должно равняться нулю'
+                    )
                 })
             if int(item['quantity']) <= 0:
                 raise ValidationError({
-                    'quantity': 'Количество должно быть больше нуля!'
+                    'quantity': 'Должны быть ингредиенты!!!'
                 })
             ingredients_list.append(item['id'])
         return value

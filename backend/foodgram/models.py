@@ -119,6 +119,9 @@ class TagsInRecipe(models.Model):
             )
         ]
 
+    def __str__(self):
+        return self.tag
+
 
 class IngredientInRecipe(models.Model):
     ingredient = models.ForeignKey(

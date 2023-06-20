@@ -28,6 +28,13 @@ class User(AbstractUser):
         verbose_name='Фамилия'
     )
 
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
+    def __str__(self):
+        return self.username
+
 
 class Follow(models.Model):
     user = models.ForeignKey(
@@ -45,3 +52,6 @@ class Follow(models.Model):
         ]
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"
+
+    def __str__(self):
+        return f'{self.user.username} подписан на {self.following.username}'

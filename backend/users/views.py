@@ -44,24 +44,18 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         else:
             serializer.save()
 
-    def perform_update(self, serializer):
-        if "password" in self.request.data:
-            password = make_password(self.request.data["password"])
-            serializer.save(password=password)
-        else:
-            serializer.save()
-
     @action(["post"], detail=False)
     def set_password(self, request, *args, **kwargs):
         user = self.request.user
         serializer = PasswordSerializer(data=request.data)
-        if serializer.is_valid():
-            user.set_password(serializer.validated_data["new_password"])
-            user.save()
-            return Response({"status": "password set"})
-        return Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+        user.set_password(serializer.validated_data["new_password"])
+        user.save()
+        return Response({"status": "password set"})
+        
 
     @action(
         methods=["get", "delete", "post"],
