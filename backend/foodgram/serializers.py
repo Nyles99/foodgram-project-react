@@ -120,19 +120,22 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             raise ValidationError({
                 'ingredients': 'Добавьте хотя бы один ингредиент!'
             })
-        ingredients_list = []
+        if len(ingredients) != len(set(
+            [ingredient['id'] for ingredient in ingredients])):
+            raise serializers.ValidationError(
+                'Ингредиенты не должны дублироваться!'
+            )
         for item in ingredients:
-            if item['id'] in ingredients_list:
-                raise ValidationError({
-                    'ingredients': (
-                        'Кол-во ингредиентов не должно равняться нулю'
-                    )
+            if item['id'] in ingredients_list: 
+                raise ValidationError({ 
+                    'ingredients': 'Ингредиенты не должны дублироваться!' 
                 })
             if int(item['quantity']) <= 0:
                 raise ValidationError({
-                    'quantity': 'Должны быть ингредиенты!!!'
+                    'quantity': (
+                    'Кол-во ингредиентов должно быть больше 0!!!'
+                    )
                 })
-            ingredients_list.append(item['id'])
         return value
 
     def create(self, validated_data):
