@@ -120,8 +120,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             raise ValidationError({
                 'ingredients': 'Добавьте хотя бы один ингредиент!'
             })
-        if (ingredients != set(
-            [ingredient['id'] for ingredient in ingredients])
+        if ingredients != set(
+            [ingredient['id'] for ingredient in ingredients]
         ):
             raise serializers.ValidationError(
                 'Ингредиенты не должны дублироваться!'
