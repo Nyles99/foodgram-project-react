@@ -23,7 +23,7 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Ingredient
         fields = ("id", "name", "measurement_unit")
@@ -120,21 +120,19 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             raise ValidationError({
                 'ingredients': 'Добавьте хотя бы один ингредиент!'
             })
-        if ingredients != set(
-            [ingredient['id'] for ingredient in ingredients]):
+        if (ingredients != set(
+            [ingredient['id'] for ingredient in ingredients])):
             raise serializers.ValidationError(
                 'Ингредиенты не должны дублироваться!'
             )
         for item in ingredients:
-            if item['id'] in ingredients: 
-                raise ValidationError({ 
-                    'ingredients': 'Ингредиенты не должны дублироваться!' 
+            if item['id'] in ingredients:
+                raise ValidationError({
+                    'ingredients': 'Ингредиенты не должны дублироваться!'
                 })
             if int(item['quantity']) <= 0:
                 raise ValidationError({
-                    'quantity': (
-                    'Кол-во ингредиентов должно быть больше 0!!!'
-                    )
+                    'quantity': ('Кол-во ингредиентов должно быть больше 0 !!!')
                 })
         return value
 

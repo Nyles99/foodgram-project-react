@@ -55,8 +55,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         user.set_password(serializer.validated_data["new_password"])
         user.save()
         return Response({"status": "password set"})
-        
-
+    
     @action(
         methods=["get", "delete", "post"],
         detail=True,
