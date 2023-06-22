@@ -132,9 +132,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                     'ingredients': 'Ингредиенты не должны дублироваться!'
                 })
             if int(item['quantity']) <= 0:
-                raise ValidationError({
-                'quantity': 'Кол-во ингредиентов должно быть больше 0 !!!'
-                })
+                raise ValidationError(
+                    {'quantity': 'Ингредиенты должно быть больше 0!'}
+                )
         return value
 
     def create(self, validated_data):
