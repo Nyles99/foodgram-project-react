@@ -24,13 +24,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     def clean_email(self):
         cleaned_email = super().clean_email(self)
-        if User.objects.filter(email__iexact=cleaned_email.get('email')).exists():
+        if User.objects.filter(
+            email__iexact=cleaned_email.get('email')).exists():
             self.fields.add_error('email', "Эта почта уже зарегистрированна")
         return cleaned_email
 
     def clean_username(self):
         cleaned_name = super().clean_email(self)
-        if User.objects.filter(username__iexact=cleaned_name.get('username')).exists():
+        if User.objects.filter(
+            username__iexact=cleaned_name.get('username')).exists():
             self.fields.add_error('username', "Этот логин уже зарегистрирован")
         return cleaned_name
 
