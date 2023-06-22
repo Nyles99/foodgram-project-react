@@ -121,7 +121,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 'ingredients': 'Добавьте хотя бы один ингредиент!'
             })
         if (ingredients != set(
-            [ingredient['id'] for ingredient in ingredients])):
+            [ingredient['id'] for ingredient in ingredients])
+        ):
             raise serializers.ValidationError(
                 'Ингредиенты не должны дублироваться!'
             )
@@ -132,7 +133,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 })
             if int(item['quantity']) <= 0:
                 raise ValidationError({
-                    'quantity': ('Кол-во ингредиентов должно быть больше 0 !!!')
+                'quantity': 'Кол-во ингредиентов должно быть больше 0 !!!'
                 })
         return value
 
