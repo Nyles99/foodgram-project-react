@@ -39,17 +39,3 @@ docker push username/название_образа:latest
 Адрес сервера указывается по IP или доменному имени. Команда для подключения вводится в формате:
 
 ssh name@ip
-
-На удаленном сервере выполните:
-sudo systemctl stop nginx 
-sudo apt install docker.io
-sudo docker-compose up -d --build
-
-После запуска контейнеров нужно выполнить миграции, накатить статику и загрузить даныные
-
-sudo docker ps -a 
-sudo docker exec -it <имя> python manage.py migrate
-sudo docker exec -it <имя> python manage.py collectstatic
-sudo docker-compose exec <имя> python manage.py createsuperuser
-sudo docker exec -it <имя> python manage.py load_ingredients_json
-

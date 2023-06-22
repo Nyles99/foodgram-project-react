@@ -5,15 +5,13 @@ services:
     restart: always
     container_name: db
     volumes:
-      - /var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
 
   backend:
-    container_name: backend
+    image: nyles99/foodgram_backend
     restart: always
-    build:
-      context: ../backend
     expose:
       - 8000
     volumes:
@@ -25,11 +23,11 @@ services:
       - ./.env
 
   frontend:
-    container_name: frontend
-    build:
-      context: ../frontend
+    container_name: nyles99/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
+    depends_on:
+      - backend
 
   nginx:
     image: nginx:1.21.3-alpine
@@ -44,10 +42,9 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
-      - backend
+      - frontend
 
 volumes:
   postgres_data:
   static_value:
   media_value:
-  result_build:
