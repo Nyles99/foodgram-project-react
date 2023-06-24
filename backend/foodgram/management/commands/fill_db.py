@@ -9,8 +9,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         with open('foodgram/management/commands/ingredients.csv',
             encoding='utf-8') as fixture:
-            for line in fixture:
-                ing = line.split(',')
+            reader = csv.reader(fixture)
+            for line in reader:
+                name, measurement_unit = line 
                 models.Ingredient.objects.get_or_create(
-                    name=ing[0], measurement_unit=ing[1]
+                    name=name, measurement_unit=measurement_unit
                 )
