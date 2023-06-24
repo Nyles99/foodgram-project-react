@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'Список покупок',
                 'verbose_name_plural': 'Список покупок',
-                'ordering': ['-time_oclock'],
+                'ordering': ['-cooking_time'],
             },
         ),
         migrations.CreateModel(
@@ -162,7 +162,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'Список покупок',
                 'verbose_name_plural': 'Список покупок',
-                'ordering': ['-time_oclock'],
+                'ordering': ['-cooking_time'],
             },
         ),
     ]
