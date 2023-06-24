@@ -18,42 +18,79 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='shoppingcart',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='shopping_cart', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='shopping_cart',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Пользователь'
+            ),
         ),
         migrations.AddField(
             model_name='recipe',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recipes', to=settings.AUTH_USER_MODEL, verbose_name='Автор'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='recipes',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Автор'
+            ),
         ),
         migrations.AddField(
             model_name='recipe',
             name='ingredients',
-            field=models.ManyToManyField(blank=True, related_name='recipes', through='foodgram.IngredientInRecipe', to='foodgram.Ingredient'),
+            field=models.ManyToManyField(
+                blank=True,
+                related_name='recipes',
+                through='foodgram.IngredientInRecipe',
+                to='foodgram.Ingredient'
+            ),
         ),
         migrations.AddField(
             model_name='recipe',
             name='tags',
-            field=models.ManyToManyField(related_name='recipes', through='foodgram.TagsInRecipe', to='foodgram.Tag'),
+            field=models.ManyToManyField(
+                related_name='recipes',
+                through='foodgram.TagsInRecipe',
+                to='foodgram.Tag'
+            ),
         ),
         migrations.AddField(
             model_name='ingredientinrecipe',
             name='ingredient',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='foodgram.ingredient', verbose_name='Ингредиент в рецепте'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to='foodgram.ingredient',
+                verbose_name='Ингредиент в рецепте'
+            ),
         ),
         migrations.AddField(
             model_name='ingredientinrecipe',
             name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='foodgram.recipe', verbose_name='Рецепт'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to='foodgram.recipe',
+                verbose_name='Рецепт'
+            ),
         ),
         migrations.AddField(
             model_name='favorite',
             name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favorite', to='foodgram.recipe', verbose_name='Рецепт'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='favorite',
+                to='foodgram.recipe',
+                verbose_name='Рецепт'
+            ),
         ),
         migrations.AddField(
             model_name='favorite',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favorite', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='favorite',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Пользователь'
+            ),
         ),
         migrations.AlterUniqueTogether(
             name='shoppingcart',
