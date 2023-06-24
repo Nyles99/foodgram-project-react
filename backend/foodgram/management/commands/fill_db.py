@@ -8,7 +8,7 @@ from foodgram import models
 class Command(BaseCommand):
     def handle(self, *args, **options):
         with open('foodgram/management/commands/ingredients.csv',
-                   encoding='utf-8') as fixture:
+                  encoding='utf-8') as fixture:
             reader = csv.reader(fixture)
             for line in reader:
                 name, measurement_unit = line
