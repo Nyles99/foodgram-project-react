@@ -14,10 +14,9 @@ DEBUG = os.getenv('INFO', default=False)
 
 ALLOWED_HOSTS = [
     'localhost',
-    '127.0.0.1',
-    '[::1]',
+    '84.252.143.165',
     'backend',
-    'testserver',
+    '*'
 ]
 
 INSTALLED_APPS = [
@@ -47,10 +46,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "backend.urls"
 
+TEMPLATES_DIR = BASE_DIR / 'templates'
+
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [TEMPLATES_DIR],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -68,8 +69,13 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.getenv(
+            'DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', default='postgres'),
+        'USER': os.getenv('POSTGRES_USER', default='postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': os.getenv('DB_HOST', default='db'),
+        'PORT': os.getenv('DB_PORT', default='5432'),
     }
 }
 
@@ -87,6 +93,8 @@ REST_FRAMEWORK = {
     ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DJOSER = {
     "HIDE_USERS": False,
