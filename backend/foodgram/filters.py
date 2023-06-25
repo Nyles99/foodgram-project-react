@@ -1,9 +1,9 @@
-import django_filters as filters
+from django_filters.rest_framework import FilterSet, filters
 
 from .models import Ingredient, Recipe, Tag
 
 
-class RecipeFilter(filters.FilterSet):
+class RecipeFilter(FilterSet):
     tags = filters.ModelMultipleChoiceFilter(
         field_name="tags__slug",
         to_field_name="slug",
@@ -31,7 +31,7 @@ class RecipeFilter(filters.FilterSet):
         return Recipe.objects.all()
 
 
-class IngredientFilter(filters.FilterSet):
+class IngredientFilter(FilterSet):
     name = filters.CharFilter(field_name="name", lookup_expr="startswith")
 
     class Meta:
