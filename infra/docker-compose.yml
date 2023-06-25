@@ -23,7 +23,7 @@ services:
       - ./.env
 
   frontend:
-    container_name: nyles99/foodgram_frontend
+    image: nyles99/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
