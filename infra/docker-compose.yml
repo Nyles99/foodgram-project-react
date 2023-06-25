@@ -11,9 +11,6 @@ services:
 
   backend:
     image: nyles99/foodgram_backend
-    restart: always
-    expose:
-      - 8000
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
