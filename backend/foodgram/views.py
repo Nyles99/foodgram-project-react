@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . import models, serializers
-from .filters import IngredientFilter, RecipeFilter
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -26,8 +25,6 @@ class IngredientsViewSet(viewsets.ModelViewSet):
     queryset = models.Ingredient.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = serializers.IngredientSerializer
-    filter_backends = [DjangoFilterBackend, ]
-    filter_class = IngredientFilter
     search_fields = ["name", ]
     pagination_class = None
 
@@ -35,8 +32,6 @@ class IngredientsViewSet(viewsets.ModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
     permissions = [IsAuthenticatedOrReadOnly, ]
-    filter_backends = [DjangoFilterBackend, ]
-    filter_class = RecipeFilter
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
