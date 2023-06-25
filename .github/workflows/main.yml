@@ -54,6 +54,8 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            sudo docker-compose stop
+            sudo docker-compose rm web
             cd infra
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_back:v1.1
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_front:v1
