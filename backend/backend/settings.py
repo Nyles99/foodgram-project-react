@@ -94,6 +94,8 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
+DEFAULT_FILTER_BACKENDS: "django_filters.rest_framework.DjangoFilterBackend"
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DJOSER = {
