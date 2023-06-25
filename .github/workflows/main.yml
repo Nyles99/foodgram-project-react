@@ -57,7 +57,7 @@ jobs:
           script: |
             sudo docker-compose stop
             sudo docker-compose rm web
-            sudo docker-compose rm foodgram_back
+            sudo docker compose rm foodgram_back
             sudo docker-compose rm foodgram_front
             cd infra
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_back
