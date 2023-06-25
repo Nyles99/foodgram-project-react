@@ -23,7 +23,7 @@ services:
       - ./.env
 
   frontend:
-    image: nyles99/foodgram_frontend
+    container_name: nyles99/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
@@ -31,14 +31,16 @@ services:
 
   nginx:
     image: nginx:1.21.3-alpine
+    restart: always
+    container_name: nginx
     ports:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
+      - ../docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-      - ../docs/:/usr/share/nginx/html/api/docs/
     depends_on:
       - frontend
 
