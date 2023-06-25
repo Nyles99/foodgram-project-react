@@ -3,7 +3,7 @@ name: Foodgram-app workflow
 on: [push]
 
 jobs:
-  tests:
+  test_flake8:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -24,7 +24,7 @@ jobs:
   build_and_push_frontend_image_to_docker_hub:
     name: Pushing frontend image to DockerHub
     runs-on: ubuntu-latest
-    needs: tests
+    needs: test_flake8
     steps:
       - name: Clone the repository
         uses: actions/checkout@v3
@@ -42,10 +42,10 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_front
 
-  build_and_push_to_docker_hub:
+  build_image_and_push_new_image_to_docker_hub:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    needs: tests
+    needs: test_flake8
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Check out the repo
