@@ -57,7 +57,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return Response({"status": "password set"})
 
     @action(
-        methods=("get", "delete", "post"),
+        methods=["get", "delete", "post"],
         detail=True,
         permission_classes=[IsAuthenticated],
     )
@@ -83,7 +83,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             return Response("Удалено", status=status.HTTP_204_NO_CONTENT)
 
     @action(
-        methods=("get", "post"),
+        methods=["get", "post"],
         detail=False,
         permission_classes=[IsAuthenticated],
     )
