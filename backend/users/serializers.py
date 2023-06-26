@@ -16,7 +16,7 @@ User = get_user_model()
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name"]
+        fields = ("id", "username", "email", "first_name", "last_name")
 
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
@@ -119,7 +119,7 @@ class ShowFollowerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
+        fields = (
             "email",
             "id",
             "username",
@@ -128,7 +128,7 @@ class ShowFollowerSerializer(serializers.ModelSerializer):
             "is_subscribed",
             "recipes",
             "recipes_count",
-        ]
+        )
 
     def check_if_is_subscribed(self, obj):
         user = self.context.get('request').user

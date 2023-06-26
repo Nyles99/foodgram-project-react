@@ -18,13 +18,13 @@ from .filters import IngredientFilter, RecipeFilter
 class TagViewSet(viewsets.ModelViewSet):
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSerializer
-    permissions = [AllowAny]
+    permissions = [AllowAny, ]
     pagination_class = None
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
     queryset = models.Ingredient.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = serializers.IngredientSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_class = IngredientFilter
@@ -34,7 +34,7 @@ class IngredientsViewSet(viewsets.ModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
-    permissions = [IsAuthenticatedOrReadOnly]
+    permissions = [IsAuthenticatedOrReadOnly, ]
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipeFilter
     pagination_class = PageNumberPagination
@@ -52,7 +52,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 
 class FavoriteView(APIView):
-    permissions = [IsAuthenticatedOrReadOnly]
+    permissions = [IsAuthenticatedOrReadOnly, ]
 
     @action(
         methods=[
@@ -99,7 +99,7 @@ class FavoriteView(APIView):
 
 class ShoppingCartView(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
 
     @action(

@@ -41,7 +41,7 @@ class ShowRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = [
+        fields = (
             "id",
             "tags",
             "author",
@@ -52,7 +52,7 @@ class ShowRecipeSerializer(serializers.ModelSerializer):
             "image",
             "text",
             "cooking_time",
-        ]
+        )
 
     def get_ingredients(self, obj):
         ingredients = IngredientInRecipe.objects.filter(recipe=obj)
@@ -90,7 +90,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = [
+        fields = (
             "id",
             "tags",
             "author",
@@ -99,7 +99,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             "image",
             "text",
             "cooking_time",
-        ]
+        )
 
     def validate_cooking_time(self, data):
         if data <= 0:
@@ -182,7 +182,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favorite
-        fields = ["recipe", "user"]
+        fields = ("recipe", "user")
         validators = [
             UniqueTogetherValidator(
                 queryset=Favorite.objects.all(),
@@ -194,7 +194,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 class ShoppingCartSerializer(FavoriteSerializer):
     class Meta:
         model = ShoppingCart
-        fields = ["recipe", "user"]
+        fields = ("recipe", "user")
         validators = [
             UniqueTogetherValidator(
                 queryset=ShoppingCart.objects.all(),
