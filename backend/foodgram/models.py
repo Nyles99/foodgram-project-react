@@ -33,7 +33,7 @@ class Tag(models.Model):
     slug = models.SlugField(max_length=200, unique=True, verbose_name="Слаг")
 
     class Meta:
-        ordering = ["name"]
+        ordering = ("name")
         verbose_name = "Тег"
         verbose_name_plural = "Теги"
         constraints = [
@@ -92,7 +92,7 @@ class Recipe(models.Model):
     image = models.ImageField()
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ("-id")
         verbose_name = "Рецепт"
         verbose_name_plural = "Рецепты"
 
@@ -160,7 +160,7 @@ class Favorite(models.Model):
     cooking_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-cooking_time"]
+        ordering = ("-cooking_time")
         verbose_name = "Список покупок"
         verbose_name_plural = verbose_name
         unique_together = ("user", "recipe")
@@ -185,7 +185,7 @@ class ShoppingCart(models.Model):
     time_oclock = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-cooking_time"]
+        ordering = ("-cooking_time")
         verbose_name = "Список покупок"
         verbose_name_plural = verbose_name
         constraints = [
