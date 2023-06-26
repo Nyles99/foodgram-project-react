@@ -60,10 +60,10 @@ jobs:
             sudo docker-compose rm web
             sudo docker-compose rm foodgram_backend
             sudo docker-compose rm foodgram_frontend
-            cd infra
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
-            sudo touch .env
+            cd infra
+            touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
@@ -72,8 +72,8 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             sudo docker-compose up -d 
             sudo docker-compose exec -T backend python manage.py collectstatic --no-input
-            sudo docker-compose exec -T backend python manage.py makemigrations
-            sudo docker-compose exec -T backend python manage.py migrate
+# sudo docker-compose exec -T backend python manage.py makemigrations
+# sudo docker-compose exec -T backend python manage.py migrate
 # sudo docker-compose exec -T backend python manage.py import_db
 
   send_message:
