@@ -57,21 +57,24 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd infra
-            sudo docker-compose stop
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
+            sudo rm -f .env
             sudo touch .env
-            echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env
+            sudo chmod 666 .env
+            
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker-compose up -d 
-            sudo docker-compose exec -T backend python manage.py collectstatic --no-input
-            sudo docker-compose exec -T backend python manage.py makemigrations
-            sudo docker-compose exec -T backend python manage.py migrate
-            sudo docker-compose exec -T backend python manage.py import_db
+            
+            sudo docker-compose stop
+            sudo docker compose rm backend
+            sudo docker-compose rm frontend
+            
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend
+            sudo docker-compose up -d
 
   send_message:
     runs-on: ubuntu-latest
