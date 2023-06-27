@@ -56,7 +56,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd infra
             sudo rm -f .env
             sudo touch .env
             sudo chmod 666 .env
