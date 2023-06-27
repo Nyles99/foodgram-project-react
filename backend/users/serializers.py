@@ -9,7 +9,6 @@ from rest_framework.authtoken.models import Token
 
 from .models import Follow
 from foodgram.models import Recipe
-from users.models import Follow, User
 
 
 User = get_user_model()
