@@ -9,12 +9,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = str(os.getenv('YOUR_SECRET_KEY'))
 
-DEBUG = os.getenv('INFO', default=False)
+DEBUG = os.getenv('INFO', default=True)
 
 
 ALLOWED_HOSTS = [
     'localhost',
-    '158.160.26.72',
+    '130.193.52.194',
     'backend',
     '*'
 ]
