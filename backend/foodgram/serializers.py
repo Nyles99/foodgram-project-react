@@ -51,7 +51,7 @@ class ShowRecipeSerializer(serializers.ModelSerializer):
             "name",
             "image",
             "text",
-            "cooking_time",
+            "cooking_time"
         )
 
     def get_ingredients(self, obj):
