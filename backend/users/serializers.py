@@ -3,7 +3,6 @@ import statistics
 from django.contrib.auth import get_user_model
 from requests import Response
 from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.authtoken.models import Token
 
@@ -15,17 +14,9 @@ User = get_user_model()
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    is_subscribed = SerializerMethodField(read_only=True)
-
     class Meta:
         model = User
         fields = ("id", "username", "email", "first_name", "last_name")
-
-    def get_is_subscribed(self, obj):
-        user = self.context.get('request').user
-        if user.is_anonymous:
-            return False
-        return Follow.objects.filter(user=user, author=obj).exists()
 
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
