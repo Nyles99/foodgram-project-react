@@ -10,7 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from backend.users.pagination import CustomPaginator
+from users.pagination import CustomPaginator
 from .serializers import (
     CustomUserSerializer,
     PasswordSerializer,
