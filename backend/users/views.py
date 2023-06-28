@@ -26,7 +26,7 @@ User = get_user_model()
 
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
-    permission_classes = (permissions.IsAuthenticatedOrRedOnly)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly)
     pagination_class = CustomPaginator
 
     def get_serializer_class(self):
