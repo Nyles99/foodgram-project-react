@@ -2,10 +2,14 @@ from django.urls import path
 from django.conf.urls import include
 from rest_framework.routers import DefaultRouter
 
+from . import views
 from .views import CustomUserViewSet
 
+app_name = 'user'
+
 router = DefaultRouter()
-router.register("users", CustomUserViewSet, basename='users')
+router.register(r"users", CustomUserViewSet, basename='users')
+router.register(r"users", views.SubscriptionViewSet, basename='subscribe')
 
 urlpatterns = [
     path('', include(router.urls)),

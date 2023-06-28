@@ -14,7 +14,7 @@ DEBUG = os.getenv('INFO', default=False)
 
 ALLOWED_HOSTS = [
     'localhost',
-    '158.160.11.166',
+    '84.201.166.115',
     'backend',
     '*'
 ]
@@ -81,6 +81,9 @@ DATABASES = {
 
 
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSIONS_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
     ],
@@ -89,7 +92,8 @@ REST_FRAMEWORK = {
     ],
     "PAGE_SIZE": 6,
     "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend"
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
     ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }

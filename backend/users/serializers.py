@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.authtoken.models import Token
 
-from .models import Follow
+from users.models import Follow, User
 from foodgram.models import Recipe
 
 
@@ -15,14 +15,18 @@ User = get_user_model()
 
 
 class CustomUserSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMetodField()
+
+
     class Meta:
         model = User
-        fields = ("id", "username", "email", "first_name", "last_name")
+        fields = ("id", "username", "email", "first_name",
+                   "last_name", 'is_subscribed' )
 
     def get_is_subscribed(self, obj):
-        request = self.context.get('request').user
-        if request.user.is_authenticated:
-            return Subscription.objects.filter(
+        user = self.context.get('request').user
+        if user.is_authenticated:
+            return Follow.objects.filter(
                 user=user, author=obj).exists()
 
     def validate_email(email):
