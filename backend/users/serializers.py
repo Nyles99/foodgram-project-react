@@ -1,7 +1,7 @@
 import re
 import statistics
 from django.contrib.auth import get_user_model
-from djoser.serializers import UserSerializer
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from requests import Response
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
