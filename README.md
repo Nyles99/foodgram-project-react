@@ -41,3 +41,11 @@ docker push username/название_образа:latest
 ssh name@ip
 
 проект доступен по адресу 84.201.166.115
+
+Админка:
+почта: root@root.ru
+пароль: root
+
+Пользователь:
+Почта: Nylesszpg@gmail.com
+пароль: Yandex01
