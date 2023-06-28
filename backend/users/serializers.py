@@ -17,13 +17,14 @@ class CustomUserSerializer(UserSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "email", "first_name",
-                   "last_name", 'is_subscribed' )
+                  "last_name", 'is_subscribed')
 
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
         if user.is_authenticated:
             return Follow.objects.filter(
-            user=user, author=obj).exists()
+            user=user, author=obj
+            ).exists()
 
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
@@ -65,18 +66,19 @@ class UserCreateSerializer(UserCreateSerializer):
         fields = ('id', 'email', 'username', 'first_name', 'last_name',
                   'password')
         required_fields = (
-            'id', 'email', 'username', 'first_name', 'last_name','password')
+            'id', 'email', 'username', 'first_name', 'last_name', 'password')
         validators = [UniqueTogetherValidator(
             queryset=User.objects.all(),
             fields=('username', 'email')
         )]
 
     def validate(self, data):
-        if not re.match(r'^[\w.@+-]+',str(data.get('username'))):
+        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
             raise serializers.ValidationError(
                 'Неверный формат имени.'
             )
         return data
+
 
 class PasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)

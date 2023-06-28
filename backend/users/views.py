@@ -40,7 +40,6 @@ class CustomUserViewSet(UserViewSet):
         detail=False,
         methods=['GET'],
         permission_classes=(permissions.IsAuthenticated,))
-
     def me(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=request.user.id)
         serializer = CustomUserSerializer(user)
