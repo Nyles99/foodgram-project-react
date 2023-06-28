@@ -14,7 +14,7 @@ DEBUG = os.getenv('INFO', default=True)
 
 ALLOWED_HOSTS = [
     'localhost',
-    '130.193.52.194',
+    '158.160.11.166',
     'backend',
     '*'
 ]
@@ -100,7 +100,6 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.UserCreateSerializer',
         'current_user': 'users.serializers.CustomUserSerializer',
         'user': 'users.serializers.CustomUserSerializer',
     },

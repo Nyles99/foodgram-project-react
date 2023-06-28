@@ -1,6 +1,7 @@
 import re
 import statistics
 from django.contrib.auth import get_user_model
+from djoser.serializers import  UserSerializer
 from requests import Response
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -13,7 +14,7 @@ from foodgram.models import Recipe
 User = get_user_model()
 
 
-class CustomUserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(UserSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "email", "first_name", "last_name")
@@ -48,7 +49,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 f'Имя пользователя {username} недопустимо. '
                 'Используйте другое имя.')
-        return username
+        return username     
 
 
 class PasswordSerializer(serializers.Serializer):
