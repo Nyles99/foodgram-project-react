@@ -26,12 +26,12 @@ class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPaginator
+
     @action(
         methods=["get", "delete", "post"],
         detail=True,
         permission_classes=[IsAuthenticated],
     )
-
     def me(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=request.user.id)
         serializer = CustomUserSerializer(user)
@@ -56,7 +56,6 @@ class CustomUserViewSet(UserViewSet):
         user.save()
         return Response({"status": "password set"})
 
-    
     def subscribe(self, request, pk=None):
         user = request.user
         following = get_object_or_404(User, pk=pk)
