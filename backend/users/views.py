@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
+from djoser.views import UserViewSet
 from rest_framework import status, viewsets
 from rest_framework.permissions import (
     IsAuthenticated,
-    AllowAny,
 )
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
@@ -21,7 +21,7 @@ from .models import Follow
 User = get_user_model()
 
 
-class CustomUserViewSet(viewsets.ModelViewSet):
+class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = None
