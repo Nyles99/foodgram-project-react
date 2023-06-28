@@ -24,11 +24,12 @@ User = get_user_model()
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [AllowAny]
     pagination_class = None
 
     @action(
-        methods=["get"], detail=False, permission_classes=[IsAuthenticated]
+        detail=False,
+        methods=['GET'],
+        permission_classes=[IsAuthenticated],
     )
     def me(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=request.user.id)
