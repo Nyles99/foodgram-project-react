@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = str(os.getenv('YOUR_SECRET_KEY'))
 
-DEBUG = os.getenv('INFO', default=True)
+DEBUG = os.getenv('INFO', default=False)
 
 
 ALLOWED_HOSTS = [
@@ -103,10 +103,6 @@ DJOSER = {
         'user_create': 'users.serializers.UserCreateSerializer',
         'current_user': 'users.serializers.CustomUserSerializer',
         'user': 'users.serializers.CustomUserSerializer',
-    },
-    'PERMISSIONS': {
-        'user_list': ['rest_framework.permissions.AllowAny'],
-        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
     }
 }
 
