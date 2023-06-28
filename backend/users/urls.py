@@ -2,7 +2,6 @@ from django.urls import path
 from django.conf.urls import include
 from rest_framework.routers import DefaultRouter
 
-from . import views
 from .views import CustomUserViewSet
 
 app_name = 'user'
