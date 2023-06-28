@@ -16,6 +16,7 @@ from .serializers import (
     PasswordSerializer,
     ShowFollowerSerializer,
     FollowerSerializer,
+    SubscriptionSerializer
 )
 from .models import Follow
 
@@ -31,6 +32,7 @@ class CustomUserViewSet(UserViewSet):
         detail=False,
         methods=['GET'],
         permission_classes=[IsAuthenticated],
+        serializer_class=SubscriptionSerializer
     )
     def me(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=request.user.id)
