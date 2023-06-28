@@ -11,7 +11,7 @@ from foodgram.models import Recipe
 
 
 class CustomUserSerializer(UserSerializer):
-    is_subscribed = serializers.SerializerMetodField()
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = User
