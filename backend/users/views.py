@@ -24,9 +24,7 @@ User = get_user_model()
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [
-        AllowAny,
-    ]
+    permission_classes = [AllowAny]
     pagination_class = None
 
     @action(
