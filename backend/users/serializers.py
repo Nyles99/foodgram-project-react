@@ -22,7 +22,7 @@ class CustomUserSerializer(UserSerializer):
         user = self.context.get('request').user
         if user.is_authenticated:
             return Follow.objects.filter(user=user, author=obj
-            ).exists()
+                                        ).exists()
 
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
