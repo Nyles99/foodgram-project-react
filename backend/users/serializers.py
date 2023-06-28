@@ -1,7 +1,7 @@
 import re
 import statistics
 from django.contrib.auth import get_user_model
-from djoser.serializers import  UserSerializer
+from djoser.serializers import UserSerializer
 from requests import Response
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -49,7 +49,7 @@ class CustomUserSerializer(UserSerializer):
             raise serializers.ValidationError(
                 f'Имя пользователя {username} недопустимо. '
                 'Используйте другое имя.')
-        return username     
+        return username
 
 
 class PasswordSerializer(serializers.Serializer):
