@@ -11,12 +11,8 @@ from users.models import Follow, User
 from foodgram.models import Recipe
 
 
-User = get_user_model()
-
-
 class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMetodField()
-
 
     class Meta:
         model = User
@@ -27,7 +23,7 @@ class CustomUserSerializer(UserSerializer):
         user = self.context.get('request').user
         if user.is_authenticated:
             return Follow.objects.filter(
-                user=user, author=obj).exists()
+            user=user, author=obj).exists()
 
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
@@ -76,7 +72,7 @@ class UserCreateSerializer(UserCreateSerializer):
         )]
 
     def validate(self, data):
-        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
+        if not re.match(r'^[\w.@+-]+',str(data.get('username'))):
             raise serializers.ValidationError(
                 'Неверный формат имени.'
             )
@@ -95,7 +91,7 @@ class PasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'Пароль не изменился.'
             )
-        return data    
+        return data
 
 
 class SpecialRecipeSerializer(serializers.ModelSerializer):

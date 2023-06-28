@@ -16,11 +16,11 @@ from .serializers import (
     PasswordSerializer,
     ShowFollowerSerializer,
     FollowerSerializer,
-    SubscriptionSerializer
+    UserCreateSerializer,
 )
 from .models import Follow
-from .serializers import (PasswordSerializer, UserCreateSerializer,
-                          CustomUserSerializer)
+
+
 User = get_user_model()
 
 
@@ -40,7 +40,7 @@ class CustomUserViewSet(UserViewSet):
         detail=False,
         methods=['GET'],
         permission_classes=(permissions.IsAuthenticated,))
-    
+
     def me(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=request.user.id)
         serializer = CustomUserSerializer(user)
