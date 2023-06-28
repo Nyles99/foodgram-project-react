@@ -1,6 +1,5 @@
 import re
 import statistics
-from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from requests import Response
 from rest_framework import serializers
@@ -22,8 +21,7 @@ class CustomUserSerializer(UserSerializer):
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
         if user.is_authenticated:
-            return Follow.objects.filter(
-            user=user, author=obj
+            return Follow.objects.filter(user=user, author=obj
             ).exists()
 
     def validate_email(email):
