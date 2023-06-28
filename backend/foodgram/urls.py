@@ -3,12 +3,9 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
-    FavoriteView,
     IngredientsViewSet,
     RecipeViewSet,
-    ShoppingCartView,
     TagViewSet,
-    download_shopping_cart,
 )
 
 router = DefaultRouter()
