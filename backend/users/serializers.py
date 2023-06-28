@@ -19,6 +19,12 @@ class CustomUserSerializer(UserSerializer):
         model = User
         fields = ("id", "username", "email", "first_name", "last_name")
 
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
+        return Follow.objects.filter(user=request.user, author=obj.id).exists()
+
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         return re.match(email_regex, email)
@@ -50,6 +56,14 @@ class CustomUserSerializer(UserSerializer):
                 f'Имя пользователя {username} недопустимо. '
                 'Используйте другое имя.')
         return username
+
+
+class UserCreateSerializer(UserCreateSerializer):
+
+    class Meta(UserCreateSerializer.Meta):
+        model = User
+        fields = ('id', 'email', 'username', 'first_name', 'last_name',
+                  'password')
 
 
 class PasswordSerializer(serializers.Serializer):
