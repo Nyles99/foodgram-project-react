@@ -20,10 +20,10 @@ class CustomUserSerializer(UserSerializer):
         fields = ("id", "username", "email", "first_name", "last_name")
 
     def get_is_subscribed(self, obj):
-        request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        return Follow.objects.filter(user=request.user, author=obj.id).exists()
+        request = self.context.get('request').user
+        if request.user.is_authenticated:
+            return Subscription.objects.filter(
+                user=user, author=obj).exists()
 
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
@@ -64,7 +64,19 @@ class UserCreateSerializer(UserCreateSerializer):
         model = User
         fields = ('id', 'email', 'username', 'first_name', 'last_name',
                   'password')
+        required_fields = (
+            'id', 'email', 'username', 'first_name', 'last_name','password')
+        validators = [UniqueTogetherValidator(
+            queryset=User.objects.all(),
+            fields=('username', 'email')
+        )]
 
+    def validate(self, data):
+        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
+            raise serializers.ValidationError(
+                'Неверный формат имени.'
+            )
+        return data
 
 class PasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
@@ -73,6 +85,13 @@ class PasswordSerializer(serializers.Serializer):
     class Meta:
         model = User
         fields = "__all__"
+
+    def validate(self, data):
+        if data['current_password'] == data['new_password']:
+            raise serializers.ValidationError(
+                'Пароль не изменился.'
+            )
+        return data    
 
 
 class SpecialRecipeSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from djoser.views import UserViewSet
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.permissions import (
     IsAuthenticated,
 )
@@ -19,14 +19,22 @@ from .serializers import (
     SubscriptionSerializer
 )
 from .models import Follow
-
+from .serializers import (PasswordSerializer, UserCreateSerializer,
+                          CustomUserSerializer)
 User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
-    serializer_class = CustomUserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrRedOnly)
     pagination_class = CustomPaginator
+
+    def get_serializer_class(self):
+        if self.action == 'set_password':
+            return PasswordSerializer
+        if self.action == 'create':
+            return UserCreateSerializer
+        return CustomUserSerializer
 
     @action(
         detail=False,
