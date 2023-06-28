@@ -10,7 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .pagination import CustomPaginator
+from backend.users.pagination import CustomPaginator
 from .serializers import (
     CustomUserSerializer,
     PasswordSerializer,
@@ -28,8 +28,8 @@ class CustomUserViewSet(UserViewSet):
     pagination_class = CustomPaginator
 
     @action(
-        methods=["get", "delete", "post"],
-        detail=True,
+        detail=False,
+        methods=['GET'],
         permission_classes=[IsAuthenticated],
     )
     def me(self, request, *args, **kwargs):
@@ -56,6 +56,11 @@ class CustomUserViewSet(UserViewSet):
         user.save()
         return Response({"status": "password set"})
 
+    @action(
+        methods=["get", "delete", "post"],
+        detail=True,
+        permission_classes=[IsAuthenticated],
+    )
     def subscribe(self, request, pk=None):
         user = request.user
         following = get_object_or_404(User, pk=pk)
