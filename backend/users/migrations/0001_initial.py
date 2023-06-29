@@ -109,9 +109,9 @@ class Migration(migrations.Migration):
                     serialize=False,
                     verbose_name='ID'
                 )),
-                ('following', models.ForeignKey(
+                ('author', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE,
-                    related_name='following',
+                    related_name='author',
                     to=settings.AUTH_USER_MODEL
                 )),
                 ('user', models.ForeignKey(
@@ -121,7 +121,7 @@ class Migration(migrations.Migration):
                 )),
             ],
             options={
-                'unique_together': {('user', 'following')},
+                'unique_together': {('user', 'author')},
             },
         ),
     ]

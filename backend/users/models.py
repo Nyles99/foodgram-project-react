@@ -27,6 +27,12 @@ class User(AbstractUser):
         blank=True,
         verbose_name='Фамилия'
     )
+    password = models.CharField(
+        'Пароль',
+        max_length=150,
+        blank=False,
+        null=False,
+    )
 
     class Meta:
         verbose_name = "Пользователь"
@@ -38,19 +44,19 @@ class User(AbstractUser):
 
 class Follow(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="follower"
+        User, on_delete=models.CASCADE, related_name="followers"
     )
-    following = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="following"
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="author"
     )
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=('user', 'following'),
+            models.UniqueConstraint(fields=('user', 'author'),
                                     name='unique_subscription'),
         ]
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"
 
     def __str__(self):
-        return f'{self.user.username} подписан на {self.following.username}'
+        return f'{self.user.username} подписан на {self.author.username}'

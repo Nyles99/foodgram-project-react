@@ -71,11 +71,11 @@ class CustomUserViewSet(UserViewSet):
     )
     def subscribe(self, request, pk=None):
         user = request.user
-        following = get_object_or_404(User, pk=pk)
-        follow = Follow.objects.filter(user=user, following=following)
+        author = get_object_or_404(User, pk=pk)
+        follow = Follow.objects.filter(user=user, author=author)
         data = {
             "user": user.id,
-            "following": following.id,
+            "author": author.id,
         }
         if request.method == "GET" or request.method == "POST":
             if follow.exists():
@@ -100,7 +100,7 @@ class CustomUserViewSet(UserViewSet):
         follow = Follow.objects.filter(user=user)
         user_obj = []
         for follow_obj in follow:
-            user_obj.append(follow_obj.following)
+            user_obj.append(follow_obj.author)
         paginator = PageNumberPagination()
         paginator.page_size = 6
         result_page = paginator.paginate_queryset(user_obj, request)

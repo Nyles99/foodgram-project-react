@@ -11,7 +11,7 @@ from foodgram.models import Recipe
 
 
 class CustomUserSerializer(UserSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -19,10 +19,10 @@ class CustomUserSerializer(UserSerializer):
                   "last_name", 'is_subscribed')
 
     def get_is_subscribed(self, obj):
-        user = self.context.get('request').user
-        if user.is_authenticated:
-            return Follow.objects.filter(
-                user=user, author=obj).exists()
+        request = self.context.get('request')
+        if request.is_authenticated:
+            return False
+        return Follow.objects.filter(user=request.user, author=obj.id).exists()
 
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
@@ -117,7 +117,7 @@ class FollowerSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all()
     )
-    following = serializers.PrimaryKeyRelatedField(
+    author = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all()
     )
 
@@ -130,18 +130,18 @@ class FollowerSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         user = data.get("user")
-        following = data.get("following")
-        if user == following:
+        author = data.get("author")
+        if user == author:
             raise serializers.ValidationError("На себя подписаться нельзя")
         return data
 
     class Meta:
-        fields = ("user", "following")
+        fields = ("user", "author")
         model = Follow
         validators = [
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
-                fields=["user", "following"],
+                fields=["user", "author"],
             )
         ]
 
@@ -167,7 +167,7 @@ class ShowFollowerSerializer(serializers.ModelSerializer):
     def check_if_is_subscribed(self, obj):
         user = self.context.get('request').user
         return user.is_authenticated and Follow.objects.filter(
-            user=user, following=obj).exists()
+            user=user, author=obj).exists()
 
     def get_recipes_count(self, obj):
         count = obj.recipes.all().count()
