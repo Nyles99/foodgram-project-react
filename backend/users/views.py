@@ -12,7 +12,6 @@ from users.pagination import CustomPaginator
 from .serializers import (
     CustomUserSerializer,
     FollowerSerializer
-    
 )
 from .models import Follow
 
