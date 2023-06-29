@@ -28,7 +28,7 @@ class TagViewSet(ListRetrieveMixin):
 
 
 class IngredientViewSet(ListRetrieveMixin):
-    """Ингредиенты."""
+    """Ингредиенты"""
 
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
