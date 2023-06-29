@@ -10,21 +10,23 @@ class User(AbstractUser):
     email = models.EmailField(
         max_length=200,
         unique=True,
+        blank=False,
         verbose_name="Почта"
     )
     username = models.CharField(
         max_length=200,
         unique=True,
+        blank=False,
         verbose_name='Логин'
     )
     first_name = models.CharField(
         max_length=200,
-        blank=True,
+        blank=False,
         verbose_name='Имя'
     )
     last_name = models.CharField(
         max_length=200,
-        blank=True,
+        blank=False,
         verbose_name='Фамилия'
     )
     password = models.CharField(
