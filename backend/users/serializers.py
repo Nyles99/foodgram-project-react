@@ -44,7 +44,7 @@ class CustomUserSerializer(UserSerializer):
             username__iexact=cleaned_name.get('username')
         ).exists():
             self.fields.add_error(
-                'username', "Этот логин уже зарегистрирован"
+                'username', "Этот логин уже зарегистрирован!"
             )
         return cleaned_name
 
