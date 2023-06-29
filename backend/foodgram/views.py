@@ -3,41 +3,45 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticatedOrReadOnly,
-)
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . import models, serializers
+from .models import Tag, Ingredient, Recipe
+from .mixins import ListRetrieveMixin
+from users.pagination import CustomPaginator
+from .permissions import IsAuthorOrReadOnly
 from .filters import IngredientFilter, RecipeFilter
+from . serializers import TagSerializer, IngredientSerializer
+
+User = get_user_model()
 
 
-class TagViewSet(viewsets.ModelViewSet):
-    queryset = models.Tag.objects.all()
-    serializer_class = serializers.TagSerializer
-    permissions = [AllowAny, ]
-    pagination_class = None
+class TagViewSet(ListRetrieveMixin):
+    """Теги."""
+
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = [AllowAny]
 
 
-class IngredientsViewSet(viewsets.ModelViewSet):
-    queryset = models.Ingredient.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly, ]
-    serializer_class = serializers.IngredientSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_class = IngredientFilter
-    search_fields = ["name", ]
-    pagination_class = None
+class IngredientViewSet(ListRetrieveMixin):
+    """Ингредиенты."""
+
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+    permission_classes = [AllowAny]
+    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = models.Recipe.objects.all()
-    permissions = [IsAuthenticatedOrReadOnly, ]
+    queryset = Recipe.objects.all()
+    permission_classes = [IsAuthorOrReadOnly, IsAuthenticatedOrReadOnly]
+    pagination_class = CustomPaginator
     filter_backends = (DjangoFilterBackend,)
-    filter_class = RecipeFilter
-    pagination_class = PageNumberPagination
+    filterset_class = RecipeFilter
 
     def get_serializer_class(self):
         method = self.request.method

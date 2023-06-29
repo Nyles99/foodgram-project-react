@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -38,7 +39,7 @@ class Tag(models.Model):
         verbose_name_plural = "Теги"
         constraints = [
             models.UniqueConstraint(fields=('name', 'color', 'slug'),
-                                    name='unique_auth'),
+                                    name='unique_tag'),
         ]
 
     def __str__(self):
@@ -78,7 +79,14 @@ class Recipe(models.Model):
     )
     name = models.CharField(max_length=200, verbose_name="Название")
     text = models.TextField(verbose_name="Описание")
-    cooking_time = models.PositiveSmallIntegerField()
+    cooking_time = models.PositiveSmallIntegerField(
+        'Время приготовления',
+        validators=[
+            MinValueValidator(
+                1, 'Время приготовления не должно быть меньше 1 минуты'
+            )
+        ]
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through="IngredientInRecipe",
@@ -132,9 +140,13 @@ class IngredientInRecipe(models.Model):
         Recipe, on_delete=models.CASCADE, verbose_name="Рецепт"
     )
     quantity = models.PositiveIntegerField(
-        null=True, verbose_name="Количество ингредиента"
+        'Количество',
+        validators=[
+            MinValueValidator(
+                1, 'Количество ингредиентов не может быть меньше 1'
+            )
+        ]
     )
-
     class Meta:
         verbose_name = "Количество ингредиента в рецепте."
         verbose_name_plural = "Количество ингредиентов в рецепте."
@@ -181,17 +193,18 @@ class ShoppingCart(models.Model):
         verbose_name="Пользователь",
         related_name="shopping_cart"
     )
-    cooking_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-cooking_time"]
-        verbose_name = "Список покупок"
-        verbose_name_plural = verbose_name
+        ordering = ['-id']
         constraints = [
             models.UniqueConstraint(
-                fields=('user', 'recipe'),
-                name='unique_shoppingcart'),
+                fields=['user', 'recipe'],
+                name='unique_user_recipe_cart'
+            )
         ]
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Списки покупок'
 
     def __str__(self):
-        return f"{self.user} added {self.recipe}"
+        return (f'{self.user.username} добавил'
+                f'{self.recipe.name} в список покупок')
