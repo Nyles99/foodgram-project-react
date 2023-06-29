@@ -3,11 +3,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from djoser.views import UserViewSet
 from rest_framework import status
-from rest_framework.permissions import (
-    IsAuthenticated,
-)
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import (AllowAny, IsAuthenticated)
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -27,7 +25,7 @@ User = get_user_model()
 
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticated],
+    permission_classes = [IsAuthenticatedOrReadOnly],
     pagination_class = CustomPaginator
 
     def get_serializer_class(self):
