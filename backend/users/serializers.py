@@ -132,7 +132,7 @@ class FollowerSerializer(serializers.ModelSerializer):
         user = data.get("user")
         author = data.get("author")
         if user == author:
-            raise serializers.ValidationError("На себя подписаться нельзя")
+            raise serializers.ValidationError("На себя подписаться нельзя!")
         return data
 
     class Meta:
