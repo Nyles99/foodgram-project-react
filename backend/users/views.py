@@ -1,20 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.hashers import make_password
 from djoser.views import UserViewSet
-from rest_framework import status, exceptions
+from rest_framework import exceptions, status
 from rest_framework.permissions import (
     IsAuthenticated,
 )
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from users.pagination import CustomPaginator
 from .serializers import (
     CustomUserSerializer,
-    ShowFollowerSerializer,
-    FollowerSerializer
+    SubscriptionSerializer,
 )
 from .models import Follow
 
@@ -23,6 +20,8 @@ User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
+    """Юзеры."""
+
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPaginator
@@ -31,7 +30,7 @@ class CustomUserViewSet(UserViewSet):
         detail=False,
         methods=['GET'],
         permission_classes=[IsAuthenticated],
-        serializer_class=FollowerSerializer
+        serializer_class=SubscriptionSerializer
     )
     def subscriptions(self, request):
         user = request.user
@@ -44,7 +43,7 @@ class CustomUserViewSet(UserViewSet):
     @action(
         detail=True,
         methods=('post', 'delete'),
-        serializer_class=FollowerSerializer
+        serializer_class=SubscriptionSerializer
     )
     def subscribe(self, request, id=None):
         user = request.user
@@ -66,22 +65,3 @@ class CustomUserViewSet(UserViewSet):
                     'Вы не подписаны на этого пользователя.')
             Follow.objects.filter(user=user, author=author).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-    @action(
-        methods=["get", "post"],
-        detail=False,
-        permission_classes=[IsAuthenticated],
-    )
-    def subscriptions(self, request):
-        user = request.user
-        follow = Follow.objects.filter(user=user)
-        user_obj = []
-        for follow_obj in follow:
-            user_obj.append(follow_obj.author)
-        paginator = PageNumberPagination()
-        paginator.page_size = 6
-        result_page = paginator.paginate_queryset(user_obj, request)
-        serializer = ShowFollowerSerializer(
-            result_page, many=True, context={"current_user": user}
-        )
-        return paginator.get_paginated_response(serializer.data)
