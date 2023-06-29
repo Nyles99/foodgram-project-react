@@ -7,8 +7,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
 )
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import (AllowAny, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -28,7 +27,7 @@ User = get_user_model()
 
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly],
+    permission_classes = [IsAuthenticated],
     pagination_class = CustomPaginator
 
     def get_serializer_class(self):
