@@ -8,15 +8,15 @@ from rest_framework.permissions import (AllowAny,
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Tag, Ingredient, Recipe, ShoppingCart, Favorite, IngredientInRecipe
+from .models import (Tag, Ingredient, Recipe,
+                     ShoppingCart, Favorite, IngredientInRecipe)
 from .mixins import ListRetrieveMixin
 from users.pagination import CustomPaginator
 from .permissions import IsAuthorOrReadOnly
 from .filters import IngredientFilter, RecipeFilter
-from . serializers import (CreateRecipeSerializer, ShowRecipeSerializer, 
+from . serializers import (CreateRecipeSerializer, ShowRecipeSerializer,
                            TagSerializer, IngredientSerializer,
-                           ShowRecipeSerializer, ShoppingCartSerializer,
-                           FavoriteSerializer)
+                           ShoppingCartSerializer, FavoriteSerializer)
 
 
 class TagViewSet(ListRetrieveMixin):
