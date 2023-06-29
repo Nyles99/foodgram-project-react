@@ -74,7 +74,7 @@ class FavoriteView(APIView):
             user=user, recipe__id=recipe_id
         ).exists():
             return Response(
-                {"Ошибка": "Уже в избранном"},
+                {"Ошибка": "Уже в избранном!"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         serializer = FavoriteSerializer(
