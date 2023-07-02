@@ -5,17 +5,29 @@ from django.db import models
 
 User = get_user_model()
 
-
+    
 class Tag(models.Model):
+    BLUE = "#0000FF"
+    RED = "#FF0000"
+    GREEN = "#008000"
+    YELLOW = "#FFFF00"
+
+    COLOR_CHOICES = [
+        (BLUE, "Синий"),
+        (RED, "Красный"),
+        (GREEN, "Зелёный"),
+        (YELLOW, "Жёлтый"),
+    ]
+
     name = models.CharField(
         'Название',
         max_length=200,
         unique=True
     )
     color = models.CharField(
-        'Цвет',
         max_length=7,
-        unique=True,
+        choices=COLOR_CHOICES,
+        verbose_name="Цвет",
         validators=[RegexValidator('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')],
     )
     slug = models.SlugField(
