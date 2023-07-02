@@ -109,8 +109,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return data
 
     def validate_tags(self, value):
+        tags = value
         if not value:
             raise ValidationError('Добавьте тег.')
+        if tags != set(tags):
+            raise serializers.ValidationError(
+                'Теги не должны дублироваться!'
+            )
         return value
 
     def validate_ingredients(self, value):
@@ -125,10 +130,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 'Ингредиенты не должны дублироваться!'
             )
         for item in ingredients:
-            if item['id'] in ingredients:
-                raise ValidationError({
-                    'ingredients': 'Ингредиенты не должны дублироваться!'
-                })
             if int(item['quantity']) <= 0:
                 raise ValidationError(
                     {'quantity': 'Ингредиенты должно быть больше 0!'}

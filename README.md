@@ -1,4 +1,4 @@
-![Cтатус workflow](https://github.com/Nyles99/foodgram-project-react/actions/workflows/yamdb_workflow.yml/badge.svg)
+![Cтатус workflow](https://github.com/Nyles99/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
 Проект "FOODgram'
 
