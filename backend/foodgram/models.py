@@ -5,7 +5,7 @@ from django.db import models
 
 User = get_user_model()
 
-    
+
 class Tag(models.Model):
     BLUE = "#0000FF"
     RED = "#FF0000"
