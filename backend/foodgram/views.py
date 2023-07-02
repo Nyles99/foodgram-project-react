@@ -4,7 +4,8 @@ from django.http import HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
 from rest_framework.permissions import (AllowAny,
-                                        IsAuthenticatedOrReadOnly)
+                                        IsAuthenticatedOrReadOnly,
+                                        IsAdminOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -24,7 +25,8 @@ class TagViewSet(ListRetrieveMixin):
 
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [AllowAny]
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
 
 
 class IngredientViewSet(ListRetrieveMixin):
