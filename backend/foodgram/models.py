@@ -21,19 +21,16 @@ class Tag(models.Model):
 
     name = models.CharField(
         'Название',
-        max_length=200,
-        unique=True
+        max_length=200
     )
     color = models.CharField(
         max_length=7,
         choices=COLOR_CHOICES,
-        verbose_name="Цвет",
-        validators=[RegexValidator('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')],
+        verbose_name="Цвет"
     )
     slug = models.SlugField(
         'Слаг',
-        max_length=200,
-        unique=True
+        max_length=200
     )
 
     class Meta:
