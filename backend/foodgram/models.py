@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 
 
@@ -7,40 +7,26 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-
-    BLUE = "#0000FF"
-    RED = "#FF0000"
-    GREEN = "#008000"
-    YELLOW = "#FFFF00"
-
-    COLOR_CHOICES = [
-        (BLUE, "Синий"),
-        (RED, "Красный"),
-        (GREEN, "Зелёный"),
-        (YELLOW, "Жёлтый"),
-    ]
-
     name = models.CharField(
+        'Название',
         max_length=200,
-        unique=True,
-        verbose_name="Название тега"
+        unique=True
     )
     color = models.CharField(
+        'Цвет',
         max_length=7,
-        choices=COLOR_CHOICES,
         unique=True,
-        verbose_name="Цвет"
+        validators=[RegexValidator('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')],
     )
-    slug = models.SlugField(max_length=200, unique=True, verbose_name="Слаг")
+    slug = models.SlugField(
+        'Слаг',
+        max_length=200,
+        unique=True
+    )
 
     class Meta:
-        ordering = ["name"]
-        verbose_name = "Тег"
-        verbose_name_plural = "Теги"
-        constraints = [
-            models.UniqueConstraint(fields=('name', 'color', 'slug'),
-                                    name='unique_tag'),
-        ]
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
     def __str__(self):
         return self.name
