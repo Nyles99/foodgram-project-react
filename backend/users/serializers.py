@@ -7,11 +7,10 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.authtoken.models import Token
 
-from users.models import Follow, User
+from users.models import Follow
 from foodgram.models import Recipe
 
 User = get_user_model()
-
 
 
 class CustomUserSerializer(UserSerializer):
