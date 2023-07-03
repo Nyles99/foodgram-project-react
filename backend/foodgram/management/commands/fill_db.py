@@ -12,8 +12,9 @@ class Command(BaseCommand):
         with open('foodgram/management/commands/ingredients.csv',
                   encoding='utf-8') as fixture:
             reader = csv.reader(fixture)
-            for line in reader:
-                name, measurement_unit = line
-                Ingredient.objects.get_or_create(
-                    name=name, measurement_unit=measurement_unit
+            for row in reader:
+                db = Ingredient(
+                    name=row['name'],
+                    measurement_unit=row['measurement_unit']
                 )
+                db.save()
