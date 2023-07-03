@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import UniqueConstraint
 
-
-User = get_user_model()
+from users.models import User
 
 
 class Tag(models.Model):
@@ -53,6 +53,7 @@ class Ingredient(models.Model):
     )
 
     class Meta:
+        ordering = ('id',)
         verbose_name = "Ингредиент"
         verbose_name_plural = "Ингредиенты"
 
@@ -89,7 +90,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Картинка',
-        upload_to='recipes/',
+        upload_to='foodgram/',
         blank=True,
     )
 
@@ -126,8 +127,8 @@ class RecipeIngredient(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Ингредиент в рецепте'
-        verbose_name_plural = 'Ингредиенты в рецепте'
+        verbose_name = 'Ингредиент для рецепта'
+        verbose_name_plural = 'Ингредиенты для рецепта'
 
 
 class Favorite(models.Model):
