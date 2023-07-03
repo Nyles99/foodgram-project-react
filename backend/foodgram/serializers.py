@@ -178,8 +178,8 @@ class PostRecipeSerializer(serializers.ModelSerializer):
         instance.tags.set(tags)
         instance.ingredients.clear()
 
-        for quantity, ingredient in (
-            self.get_ingredients(validated_data.pop('ingredients'))):
+        for quantity, ingredient in self.get_ingredients(validated_data.
+                                                         pop('ingredients')):
             RecipeIngredient.objects.update_or_create(
                 recipe=instance,
                 ingredient=ingredient,
