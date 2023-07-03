@@ -94,7 +94,7 @@ class Recipe(models.Model):
     image = models.ImageField()
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["-pub_date"]
         verbose_name = "Рецепт"
         verbose_name_plural = "Рецепты"
 
