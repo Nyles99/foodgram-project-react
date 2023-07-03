@@ -14,7 +14,7 @@ DEBUG = os.getenv('INFO', default=False)
 
 ALLOWED_HOSTS = [
     'localhost',
-    '84.252.136.202',
+    '158.160.16.181',
     'backend',
     '*'
 ]
