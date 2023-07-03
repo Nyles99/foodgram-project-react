@@ -59,7 +59,7 @@ class Ingredient(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.name}, {self.measurement_unit}"
+        return self.name
 
 
 class Recipe(models.Model):
@@ -154,7 +154,7 @@ class IngredientInRecipe(models.Model):
 class Favorite(models.Model):
     recipe = models.ForeignKey(
         Recipe,
-        related_name="favorite",
+        related_name="favorites",
         on_delete=models.CASCADE,
         verbose_name="Рецепт"
     )
@@ -162,18 +162,22 @@ class Favorite(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name="Пользователь",
-        related_name="favorite"
+        related_name="favorites"
     )
-    cooking_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-cooking_time"]
-        verbose_name = "Список покупок"
-        verbose_name_plural = verbose_name
-        unique_together = ("user", "recipe")
+        ordering = ["-id"]
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранное'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_user_recipe_favorite'
+            )
+        ]
 
     def __str__(self):
-        return f"{self.user} added {self.recipe}"
+        return f'{self.user.username} добавил {self.recipe.name} в избраннное'
 
 
 class ShoppingCart(models.Model):
