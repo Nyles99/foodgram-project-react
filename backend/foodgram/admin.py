@@ -35,7 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(models.RecipeIngredient)
+@admin.register(models.IngredientInRecipe)
 class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'recipe', 'ingredient', 'quantity')
     empty_value_display = settings.EMPTY_VALUE

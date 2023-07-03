@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 import re
 import statistics
 from djoser.serializers import UserCreateSerializer, UserSerializer
@@ -7,10 +6,8 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.authtoken.models import Token
 
-from users.models import Follow
+from users.models import Follow, User
 from foodgram.models import Recipe
-
-User = get_user_model()
 
 
 class CustomUserSerializer(UserSerializer):
@@ -182,4 +179,3 @@ class ShortRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
-#  End

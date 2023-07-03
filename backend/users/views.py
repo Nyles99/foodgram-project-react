@@ -3,16 +3,16 @@ from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from rest_framework import status, exceptions
 from rest_framework.permissions import (
-    IsAuthenticated,
+    AllowAny,
 )
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from users.pagination import CustomPaginator
-from foodgram.serializers import SubscriptionSerializer
-from .serializers import CustomUserSerializer
-
-
+from .serializers import (
+    CustomUserSerializer,
+    FollowerSerializer
+)
 from .models import Follow
 
 
@@ -20,8 +20,6 @@ User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
-    """Юзеры."""
-
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPaginator
@@ -29,8 +27,8 @@ class CustomUserViewSet(UserViewSet):
     @action(
         detail=False,
         methods=['GET'],
-        permission_classes=[IsAuthenticated],
-        serializer_class=SubscriptionSerializer
+        permission_classes=[AllowAny],
+        serializer_class=FollowerSerializer
     )
     def subscriptions(self, request):
         user = request.user
@@ -43,7 +41,7 @@ class CustomUserViewSet(UserViewSet):
     @action(
         detail=True,
         methods=('post', 'delete'),
-        serializer_class=SubscriptionSerializer
+        serializer_class=FollowerSerializer
     )
     def subscribe(self, request, id=None):
         user = request.user
