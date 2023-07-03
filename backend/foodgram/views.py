@@ -16,9 +16,9 @@ from .mixins import ListRetrieveMixin
 from users.pagination import CustomPaginator
 from .permissions import IsAuthorOrReadOnly
 from .filters import IngredientFilter, RecipeFilter
-from .serializers import ( GetRecipeSerializer,
-                          IngredientSerializer, PostRecipeSerializer,
-                          ShortRecipeSerializer, TagSerializer)
+from .serializers import (GetRecipeSerializer, IngredientSerializer,
+                          PostRecipeSerializer, ShortRecipeSerializer,
+                          TagSerializer)
 
 User = get_user_model()
 
@@ -57,7 +57,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
-
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

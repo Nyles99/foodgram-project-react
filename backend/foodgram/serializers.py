@@ -3,7 +3,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                            ShoppingCart, Tag)
+                     ShoppingCart, Tag)
 from users.serializers import CustomUserSerializer
 from rest_framework import exceptions, serializers
 
@@ -78,7 +78,7 @@ class GetRecipeSerializer(serializers.ModelSerializer):
         recipe = obj
         ingredients = RecipeIngredient.objects.filter(recipe=recipe)
         serializer = GetIngredientRecipeSerializer(ingredients, many=True)
-        return serializer.data   
+        return serializer.data
 
 
 class ShortRecipeSerializer(serializers.ModelSerializer):
@@ -152,7 +152,8 @@ class PostRecipeSerializer(serializers.ModelSerializer):
             quantity = ingredient['quantity']
             ingredient_instance = ingredient['id']
 
-            yield quantity, get_object_or_404(Ingredient, pk=ingredient_instance)
+            yield quantity, get_object_or_404(
+                Ingredient, pk=ingredient_instance)
 
     @transaction.atomic
     def create(self, validated_data):
@@ -177,8 +178,8 @@ class PostRecipeSerializer(serializers.ModelSerializer):
         instance.tags.set(tags)
         instance.ingredients.clear()
 
-        for quantity, ingredient in self.get_ingredients(validated_data.
-                                                       pop('ingredients')):
+        for quantity, ingredient in self.get_ingredients(
+            validated_data.pop('ingredients')):
             RecipeIngredient.objects.update_or_create(
                 recipe=instance,
                 ingredient=ingredient,
