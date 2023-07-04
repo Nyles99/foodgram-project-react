@@ -86,7 +86,7 @@ class Recipe(models.Model):
         Ingredient,
         through="IngredientInRecipe",
         related_name="recipes",
-        blank=True
+        
     )
     pub_date = models.DateTimeField(
         auto_now_add=True, verbose_name="Время публикации"
