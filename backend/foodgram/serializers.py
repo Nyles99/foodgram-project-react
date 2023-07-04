@@ -2,12 +2,35 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
+from djoser.serializers import UserSerializer
+from users.models import Follow
 from foodgram.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from rest_framework import exceptions, serializers
+
 from users.serializers import CustomUserSerializer
 
 User = get_user_model()
+
+
+class CustomUserSerializer(UserSerializer):
+    """
+    Сериализатор для эндпоинтов
+    me, users и users/id/
+    """
+
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'username', 'first_name',
+                  'last_name', 'is_subscribed')
+
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
+        return Follow.objects.filter(user=request.user, author=obj.id).exists()
 
 
 class TagSerializer(serializers.ModelSerializer):

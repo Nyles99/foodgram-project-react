@@ -7,11 +7,6 @@ from foodgram.serializers import ShortRecipeSerializer
 
 
 class CustomUserSerializer(UserSerializer):
-    """
-    Сериализатор для эндпоинтов
-    me, users и users/id/
-    """
-
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -27,11 +22,6 @@ class CustomUserSerializer(UserSerializer):
 
 
 class UserCreateSerializer(UserCreateSerializer):
-    """
-    Cериализатор для эндпоинта
-    users/
-    """
-
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('id', 'email', 'username', 'first_name', 'last_name',
