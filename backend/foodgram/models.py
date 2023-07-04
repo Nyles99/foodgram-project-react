@@ -118,7 +118,6 @@ class RecipeIngredient(models.Model):
         on_delete=models.CASCADE,
         related_name='recipeingredients',
         verbose_name='Ингредиент',
-        required=False
     )
     quantity = models.PositiveIntegerField(
         'Количество',
