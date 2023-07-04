@@ -117,7 +117,8 @@ class RecipeIngredient(models.Model):
         Ingredient,
         on_delete=models.CASCADE,
         related_name='recipeingredients',
-        verbose_name='Ингредиент'
+        verbose_name='Ингредиент',
+        required=False
     )
     quantity = models.PositiveIntegerField(
         'Количество',
