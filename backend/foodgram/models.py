@@ -125,14 +125,19 @@ class TagsInRecipe(models.Model):
         return self.tag
 
 
-class IngredientInRecipe(models.Model):
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='recipeingredients',
+        verbose_name='Рецепт'
+
+    )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        verbose_name="Ингредиент в рецепте"
-    )
-    recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, verbose_name="Рецепт"
+        related_name='recipeingredients',
+        verbose_name='Ингредиент'
     )
     quantity = models.PositiveIntegerField(
         'Количество',
@@ -144,11 +149,8 @@ class IngredientInRecipe(models.Model):
     )
 
     class Meta:
-        verbose_name = "Количество ингредиента в рецепте."
-        verbose_name_plural = "Количество ингредиентов в рецепте."
-
-    def __str__(self):
-        return self.quantity
+        verbose_name = 'Ингредиент в рецепте'
+        verbose_name_plural = 'Ингредиенты в рецепте'
 
 
 class Favorite(models.Model):

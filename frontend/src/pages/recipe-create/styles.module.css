@@ -12,7 +12,7 @@
   width: 230px;
 }
 
-.ingredientsAmountInputContainer {
+.ingredientsQuantityInputContainer {
   display: flex;
 }
 
@@ -38,7 +38,7 @@
   min-width: 230px;
 }
 
-.ingredientsAmountValue {
+.ingredientsQuantityValue {
   max-width: 100px;
 }
 
@@ -47,7 +47,7 @@
 }
 
 .ingredientsNameInput,
-.ingredientsAmountInput,
+.ingredientsQuantityInput,
 .measurementUnit {
   margin-bottom: 20px;
 }

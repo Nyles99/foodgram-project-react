@@ -13,7 +13,7 @@ const RecipeCreate = ({ onEdit }) => {
   const [ ingredientValue, setIngredientValue ] = useState({
     name: '',
     id: null,
-    amount: '',
+    quantity: '',
     measurement_unit: ''
   })
   const [ recipeIngredients, setRecipeIngredients ] = useState([])
@@ -77,7 +77,7 @@ const RecipeCreate = ({ onEdit }) => {
             name: recipeName,
             ingredients: recipeIngredients.map(item => ({
               id: item.id,
-              amount: item.amount
+              quantity: item.quantity
             })),
             tags: value.filter(item => item.value).map(item => item.id),
             cooking_time: recipeTime,
@@ -144,18 +144,18 @@ const RecipeCreate = ({ onEdit }) => {
               }}
               value={ingredientValue.name}
             />
-            <div className={styles.ingredientsAmountInputContainer}>
+            <div className={styles.ingredientsQuantityInputContainer}>
               <Input
-                className={styles.ingredientsAmountInput}
-                inputClassName={styles.ingredientsAmountValue}
+                className={styles.ingredientsQuantityInput}
+                inputClassName={styles.ingredientsQuantityValue}
                 onChange={e => {
                   const value = e.target.value
                   setIngredientValue({
                     ...ingredientValue,
-                    amount: value
+                    quantity: value
                   })
                 }}
-                value={ingredientValue.amount}
+                value={ingredientValue.quantity}
               />
               {ingredientValue.measurement_unit !== '' && <div className={styles.measurementUnit}>{ingredientValue.measurement_unit}</div>}
             </div>
@@ -174,7 +174,7 @@ const RecipeCreate = ({ onEdit }) => {
               return <div
                 className={styles.ingredientsAddedItem}
               >
-                <span className={styles.ingredientsAddedItemTitle}>{item.name}</span> <span>-</span> <span>{item.amount}{item.measurement_unit}</span> <span
+                <span className={styles.ingredientsAddedItemTitle}>{item.name}</span> <span>-</span> <span>{item.quantity}{item.measurement_unit}</span> <span
                   className={styles.ingredientsAddedItemRemove}
                   onClick={_ => {
                     const recipeIngredientsUpdated = recipeIngredients.filter(ingredient => {
@@ -189,12 +189,12 @@ const RecipeCreate = ({ onEdit }) => {
           <div
             className={styles.ingredientAdd}
             onClick={_ => {
-              if (ingredientValue.amount === '' || ingredientValue.name === '' || !ingredientValue.id) { return }
+              if (ingredientValue.quantity === '' || ingredientValue.name === '' || !ingredientValue.id) { return }
               setRecipeIngredients([...recipeIngredients, ingredientValue])
               setIngredientValue({
                 name: '',
                 id: null,
-                amount: '',
+                quantity: '',
                 measurement_unit: ''
               })
             }}
