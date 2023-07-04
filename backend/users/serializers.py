@@ -24,27 +24,6 @@ class CustomUserSerializer(UserSerializer):
             return False
         return Follow.objects.filter(user=user, author=obj).exists()
 
-
-class UserCreateSerializer(UserCreateSerializer):
-
-    class Meta(UserCreateSerializer.Meta):
-        model = User
-        fields = ('id', 'email', 'username', 'first_name', 'last_name',
-                  'password')
-        required_fields = (
-            'id', 'email', 'username', 'first_name', 'last_name', 'password')
-        validators = [UniqueTogetherValidator(
-            queryset=User.objects.all(),
-            fields=('username', 'email')
-        )]
-
-    def validate(self, data):
-        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
-            raise serializers.ValidationError(
-                'Неверный формат имени.'
-            )
-        return data
-
     def validate_email(email):
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         return re.match(email_regex, email)
@@ -76,6 +55,27 @@ class UserCreateSerializer(UserCreateSerializer):
                 f'Имя пользователя {username} недопустимо. '
                 'Используйте другое имя.')
         return username
+
+
+class UserCreateSerializer(UserCreateSerializer):
+
+    class Meta(UserCreateSerializer.Meta):
+        model = User
+        fields = ('id', 'email', 'username', 'first_name', 'last_name',
+                  'password')
+        required_fields = (
+            'id', 'email', 'username', 'first_name', 'last_name', 'password')
+        validators = [UniqueTogetherValidator(
+            queryset=User.objects.all(),
+            fields=('username', 'email')
+        )]
+
+    def validate(self, data):
+        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
+            raise serializers.ValidationError(
+                'Неверный формат имени.'
+            )
+        return data
 
 
 class PasswordSerializer(serializers.Serializer):
