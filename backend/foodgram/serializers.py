@@ -5,7 +5,6 @@ from drf_extra_fields.fields import Base64ImageField
 from foodgram.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from rest_framework import exceptions, serializers
-from users.serializers import CustomUserSerializer
 
 User = get_user_model()
 
