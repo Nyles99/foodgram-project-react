@@ -143,16 +143,25 @@ class PostRecipeSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError('Должен быть хотя бы один тег.')
         return tags
 
-    def validate_ingredients(self, ingredients):
+    def validate_ingredients(self, value):
+        '''Валидатор ингредиентов'''
+        ingredients = value
         if not ingredients:
-            raise exceptions.ValidationError(
-                'Должен быть хотя бы один ингредиент.')
-
-        if len(ingredients) != len(set(ingredient['id']
-                                       for ingredient in ingredients)):
-            raise exceptions.ValidationError(
-                'У рецепка не может быть два одинаковых игредиента.')
-        return ingredients
+            raise exceptions.ValidationError({
+                'ingredients': 'Добавьте хотя бы один ингредиент!'
+            })
+        ingredients_list = []
+        for item in ingredients:
+            if item['id'] in ingredients_list:
+                raise exceptions.ValidationError({
+                    'ingredients': 'Ингредиенты не должны дублироваться!'
+                })
+            if int(item['quantity']) <= 0:
+                raise exceptions.ValidationError({
+                    'quantity': 'Количество должно быть больше нуля!'
+                })
+            ingredients_list.append(item['id'])
+        return value
 
     def validate_cooking_time(self, cooking_time):
         if cooking_time <= 0:
@@ -160,12 +169,20 @@ class PostRecipeSerializer(serializers.ModelSerializer):
                 'Минимальное время приготовления 1 минута.')
         return cooking_time
 
-    def get_ingredients(self, ingredients):
-        for ingredient in ingredients:
-            quantity = ingredient['quantity']
-            ingredient_instance = ingredient['id']
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        context = {'request': request}
+        return GetRecipeSerializer(instance,
+                                   context=context).data
 
-            yield quantity, get_object_or_404(Ingredient, pk=ingredient_instance)
+    def addon_for_create_update_methods(self, ingredients, tags, recipe):
+        recipe.tags.set(tags)
+        RecipeIngredient.objects.bulk_create([RecipeIngredient(
+            recipe=recipe,
+            ingredient=ingredient['id'],
+            quantity=ingredient['quantity'],
+        ) for ingredient in ingredients])
+        return recipe
 
     @transaction.atomic
     def create(self, validated_data):
