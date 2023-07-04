@@ -6,3 +6,4 @@ DELETE_VALIDATION_ERRORS = {
     'Favorite': 'Рецепта нет в ибранном.',
     'ShoppingCart': 'Рецепта нет в списке покупок.'
 }
+# конец
