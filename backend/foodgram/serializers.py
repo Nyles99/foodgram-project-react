@@ -1,13 +1,65 @@
 from django.db.transaction import atomic
 from drf_extra_fields.fields import Base64ImageField
-from users.serializers import CustomUserSerializer
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 from rest_framework import serializers
 
+from users.models import Follow, User
 from foodgram.models import (Ingredient, Recipe, RecipeIngredient, Favorite,
                             ShoppingCart, Tag)
+
+
+class CustomUserSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'username', 'first_name',
+                  'last_name', 'is_subscribed')
+
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
+        return Follow.objects.filter(user=request.user, author=obj.id).exists()
+
+
+class UserCreateSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        model = User
+        fields = ('id', 'email', 'username', 'first_name', 'last_name',
+                  'password'
+        )
+
+
+class RecipeShowSerializer(ModelSerializer):
+    '''
+    Дополнительный сериализатор для отображения рецептов
+    в подписках, избранном и покупках
+    '''
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
+
+
+class FollowSerializer(CustomUserSerializer):
+    '''Сериализатор подписoк'''
+
+    recipes_count = serializers.IntegerField(source='recipes.count',
+                                             read_only=True)
+    recipes = RecipeShowSerializer(many=True, read_only=True)
+    is_subscribed = serializers.BooleanField(default=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'username', 'first_name',
+                  'last_name', 'recipes_count', 'recipes',
+                  'is_subscribed')
+        read_only_fields = ('email', 'username',
+                            'first_name', 'last_name')
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -24,17 +76,6 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
-
-
-class RecipeShowSerializer(ModelSerializer):
-    '''
-    Дополнительный сериализатор для отображения рецептов
-    в подписках, избранном и покупках
-    '''
-
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
 
 
 class IngredientRecipeCreationSerializer(ModelSerializer):
@@ -115,7 +156,7 @@ class RecipeCreateSerializer(ModelSerializer):
         for item in ingredients:
             if item['id'] in ingredients_list:
                 raise ValidationError({
-                    'ingredients': 'Ингредиенты не должны дублироваться!!'
+                    'ingredients': 'Ингредиенты не должны дублироваться!'
                 })
             if int(item['quantity']) <= 0:
                 raise ValidationError({

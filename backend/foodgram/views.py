@@ -3,26 +3,78 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from foodgram.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                            ShoppingCart, Tag)
+from djoser.views import UserViewSet
 from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, exceptions
 from rest_framework.permissions import (AllowAny, IsAuthenticated,
                                         SAFE_METHODS)
 from rest_framework.response import Response
 
 from .filters import IngredientFilter, RecipeFilter
 from .mixins import ListRetrieveMixin
+from users.models import Follow, User
 from users.pagination import CustomPaginator
 from .permissions import IsAuthorOrReadOnly
+from foodgram.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
 from .serializers import (RecipeGetSerializer,
                           IngredientSerializer, RecipeCreateSerializer,
-                          RecipeShowSerializer, TagSerializer)
+                          RecipeShowSerializer, TagSerializer,
+                          FollowSerializer, CustomUserSerializer)
+from users.pagination import CustomPaginator
 
-User = get_user_model()
+
 
 SHOP_LIST = 'Список покупок:'
 FILE = 'shopping_list.txt'
+
+
+class CustomUserViewSet(UserViewSet):
+    '''Вьюсет для пользователей и подписок'''
+
+    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
+    pagination_class = CustomPaginator
+
+    @action(
+        detail=False,
+        methods=['GET'],
+        permission_classes=[IsAuthenticated],
+        serializer_class=FollowSerializer
+    )
+    def subscriptions(self, request):
+        user = request.user
+        favorites = user.followers.all()
+        users = User.objects.filter(id__in=[f.author.id for f in favorites])
+        paginated_queryset = self.paginate_queryset(users)
+        serializer = self.serializer_class(paginated_queryset, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=('post', 'delete'),
+        serializer_class=FollowSerializer
+    )
+    def subscribe(self, request, id=None):
+        user = request.user
+        author = get_object_or_404(User, pk=id)
+        if request.method == 'POST':
+            if user == author:
+                raise exceptions.ValidationError(
+                    'Подписываться на себя запрещено.')
+            if Follow.objects.filter(user=user, author=author).exists():
+                raise exceptions.ValidationError(
+                    'Вы уже подписаны на этого пользователя.')
+            Follow.objects.create(user=user, author=author)
+            serializer = self.get_serializer(author)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        if request.method == 'DELETE':
+            if not Follow.objects.filter(user=user, author=author).exists():
+                raise exceptions.ValidationError(
+                    'Вы не подписаны на этого пользователя.')
+            Follow.objects.filter(user=user, author=author).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TagViewSet(ListRetrieveMixin):
