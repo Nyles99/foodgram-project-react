@@ -72,7 +72,7 @@ class CustomUserViewSet(UserViewSet):
         if request.method == 'DELETE':
             if not Follow.objects.filter(user=user, author=author).exists():
                 raise exceptions.ValidationError(
-                    'Вы не подписаны на этого пользователя.')
+                    'Вы не подписаны на этого пользователя!')
             Follow.objects.filter(user=user, author=author).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
