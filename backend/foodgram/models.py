@@ -125,7 +125,7 @@ class TagsInRecipe(models.Model):
         return self.tag
 
 
-class IngredientInRecipe(models.Model):
+class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
