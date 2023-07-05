@@ -1,6 +1,6 @@
 from django.db.transaction import atomic
 from drf_extra_fields.fields import Base64ImageField
-from djoser.serializers import UserSerializer
+from users.serializers import CustomUserSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
