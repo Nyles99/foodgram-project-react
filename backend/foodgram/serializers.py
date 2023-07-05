@@ -136,7 +136,7 @@ class RecipeCreateSerializer(ModelSerializer):
         for item in ingredients:
             if item['id'] in ingredients_list:
                 raise ValidationError({
-                    'ingredients': 'Ингредиенты не должны дублироваться!'
+                    'ingredients': 'Ингредиенты не должны дублироваться!!'
                 })
             if int(item['quantity']) <= 0:
                 raise ValidationError({

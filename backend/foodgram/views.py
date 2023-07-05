@@ -17,8 +17,7 @@ from users.pagination import CustomPaginator
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (RecipeGetSerializer,
                           IngredientSerializer, RecipeCreateSerializer,
-                          RecipeShowSerializer, 
-                          TagSerializer)
+                          RecipeShowSerializer, TagSerializer)
 
 User = get_user_model()
 
