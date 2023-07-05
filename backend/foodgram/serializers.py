@@ -120,24 +120,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             )
         return value
 
-    def validate_ingredients(self, value):
-        '''Валидатор ингредиентов'''
-        ingredients = value
-        if not ingredients:
-            raise ValidationError({
-                'ingredients': 'Добавьте хотя бы один ингредиент!'
-            })
-        if ingredients != set(ingredients):
-            raise serializers.ValidationError(
-                'Ингредиенты не должны дублироваться!'
-            )
-        for item in ingredients:
-            if int(item['amount']) <= 0:
-                raise ValidationError(
-                    {'amount': 'Ингредиенты должно быть больше 0!'}
-                )
-        return value
-
     def create(self, validated_data):
         author = self.context.get('request').user
         tags = validated_data.pop('tags')
