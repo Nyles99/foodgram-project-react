@@ -98,14 +98,16 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.UserCreateSerializer',
-        'current_user': 'users.serializers.CustomUserSerializer',
-        'user': 'users.serializers.CustomUserSerializer',
+        'user_create': 'foodgram.serializers.UserCreateSerializer',
+        'current_user': 'foodgram.serializers.CustomUserSerializer',
+        'user': 'foodgram.serializers.CustomUserSerializer',
     },
     'PERMISSIONS': {
+        'set_username': ['rest_framework.permissions.IsAdminUser'],
+        'user': ['rest_framework.permissions.AllowAny'],
         'user_list': ['rest_framework.permissions.AllowAny'],
-        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
-    }
+        'user_delete': ['rest_framework.permissions.IsAdminUser'],
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
