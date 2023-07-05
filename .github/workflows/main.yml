@@ -76,6 +76,9 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend
             sudo docker-compose up -d
             sudo docker-compose exec -T backend python manage.py collectstatic --no-input
+            sudo docker-compose exec -T backend python manage.py makemigrations
+            sudo docker-compose exec -T backend python manage.py migrate
+            sudo docker-compose exec -T backend python manage.py fill_db
 
   send_message:
     runs-on: ubuntu-latest
