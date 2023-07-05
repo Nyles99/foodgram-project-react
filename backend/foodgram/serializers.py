@@ -19,7 +19,7 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IngredientInRecipe
-        fields = ("id", "name", "measurement_unit", "quantity")
+        fields = ("id", "name", "measurement_unit", "amount")
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -78,7 +78,7 @@ class AddIngredientToRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IngredientInRecipe
-        fields = ("id", "quantity")
+        fields = ("id", "amount")
 
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
@@ -132,9 +132,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 'Ингредиенты не должны дублироваться!'
             )
         for item in ingredients:
-            if int(item['quantity']) <= 0:
+            if int(item['amount']) <= 0:
                 raise ValidationError(
-                    {'quantity': 'Ингредиенты должно быть больше 0!'}
+                    {'amount': 'Ингредиенты должно быть больше 0!'}
                 )
         return value
 
@@ -145,11 +145,11 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         recipe = Recipe.objects.create(author=author, **validated_data)
         recipe.tags.set(tags)
         recipe_ingredients = []
-        for quantity, ingredient in self.get_ingredients(ingredients):
+        for amount, ingredient in self.get_ingredients(ingredients):
             recipe_ingredients.append(IngredientInRecipe(
                 recipe=recipe,
                 ingredient=ingredient,
-                quantity=quantity
+                amount=amount
             ))
         IngredientInRecipe.objects.bulk_create(recipe_ingredients)
         return recipe
@@ -161,9 +161,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         IngredientInRecipe.objects.filter(recipe=instance).delete()
         for ingredient in ingredients:
             ingredient_model = ingredient["id"]
-            quantity = ingredient["quantity"]
+            amount = ingredient["amount"]
             IngredientInRecipe.objects.bulk_create(
-                ingredient=ingredient_model, recipe=instance, quantity=quantity
+                ingredient=ingredient_model, recipe=instance, amount=amount
             )
         instance.name = validated_data.pop("name")
         instance.text = validated_data.pop("text")

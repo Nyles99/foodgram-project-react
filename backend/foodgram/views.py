@@ -160,22 +160,22 @@ def download_shopping_cart(request):
         recipe = record.recipe
         ingredients = IngredientInRecipe.objects.filter(recipe=recipe)
         for ingredient in ingredients:
-            quantity = ingredient.quantity
+            amount = ingredient.amount
             name = ingredient.ingredient.name
             measurement_unit = ingredient.ingredient.measurement_unit
             if name not in buying_list:
                 buying_list[name] = {
                     "measurement_unit": measurement_unit,
-                    "quantity": quantity,
+                    "amount": amount,
                 }
             else:
-                buying_list[name]["quantity"] = (
-                    buying_list[name]["quantity"] + quantity
+                buying_list[name]["amount"] = (
+                    buying_list[name]["amount"] + amount
                 )
     wishlist = []
     for name, data in buying_list.items():
         wishlist.append(
-            f"{name} - {data['quantity']} {data['measurement_unit']}"
+            f"{name} - {data['amount']} {data['measurement_unit']}"
         )
     response = HttpResponse(wishlist, content_type="text/plain")
     return response

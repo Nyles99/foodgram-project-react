@@ -134,7 +134,7 @@ class IngredientInRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, verbose_name="Рецепт"
     )
-    quantity = models.PositiveIntegerField(
+    amount = models.PositiveIntegerField(
         'Количество',
         validators=[
             MinValueValidator(
@@ -148,7 +148,7 @@ class IngredientInRecipe(models.Model):
         verbose_name_plural = "Количество ингредиентов в рецепте."
 
     def __str__(self):
-        return self.quantity
+        return self.amount
 
 
 class Favorite(models.Model): 
