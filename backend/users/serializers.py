@@ -4,7 +4,7 @@ from djoser.serializers import UserSerializer
 
 from users.models import Follow, User
 from foodgram.models import Recipe
-from foodgram.serializers import ShortRecipeSerializer
+from foodgram.serializers import RecipeShowSerializer
 
 
 class CustomUserSerializer(UserSerializer):
@@ -47,7 +47,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     def get_recipes(self, object):
         queryset = object.recipes.all()[:3]
 
-        return ShortRecipeSerializer(queryset, many=True).data
+        return RecipeShowSerializer(queryset, many=True).data
 
     class Meta:
         model = User
