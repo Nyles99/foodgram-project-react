@@ -120,7 +120,7 @@ class RecipeIngredient(models.Model):
         related_name='recipeingredients',
         verbose_name='Ингредиент',
     )
-    quantity = models.PositiveIntegerField(
+    amount = models.PositiveIntegerField(
         'Количество',
         validators=[
             MinValueValidator(

@@ -13,7 +13,7 @@ const RecipeEdit = ({ onItemDelete }) => {
   const [ ingredientValue, setIngredientValue ] = useState({
     name: '',
     id: null,
-    quantity: '',
+    amount: '',
     measurement_unit: ''
   })
 
@@ -118,7 +118,7 @@ const RecipeEdit = ({ onItemDelete }) => {
             name: recipeName,
             ingredients: recipeIngredients.map(item => ({
               id: item.id,
-              quantity: item.quantity
+              amount: item.amount
             })),
             tags: value.filter(item => item.value).map(item => item.id),
             cooking_time: recipeTime,
@@ -188,18 +188,18 @@ const RecipeEdit = ({ onItemDelete }) => {
               }}
               value={ingredientValue.name}
             />
-            <div className={styles.ingredientsQuantityInputContainer}>
+            <div className={styles.ingredientsamountInputContainer}>
               <Input
-                className={styles.ingredientsQuantityInput}
-                inputClassName={styles.ingredientsQuantityValue}
+                className={styles.ingredientsamountInput}
+                inputClassName={styles.ingredientsamountValue}
                 onChange={e => {
                   const value = e.target.value
                   setIngredientValue({
                     ...ingredientValue,
-                    quantity: value
+                    amount: value
                   })
                 }}
-                value={ingredientValue.quantity}
+                value={ingredientValue.amount}
               />
               {ingredientValue.measurement_unit !== '' && <div className={styles.measurementUnit}>{ingredientValue.measurement_unit}</div>}
             </div>
@@ -217,7 +217,7 @@ const RecipeEdit = ({ onItemDelete }) => {
               return <div
                 className={styles.ingredientsAddedItem}
               >
-                <span className={styles.ingredientsAddedItemTitle}>{item.name}</span> <span>-</span> <span>{item.quantity}{item.measurement_unit}</span> <span
+                <span className={styles.ingredientsAddedItemTitle}>{item.name}</span> <span>-</span> <span>{item.amount}{item.measurement_unit}</span> <span
                   className={styles.ingredientsAddedItemRemove}
                   onClick={_ => {
                     const recipeIngredientsUpdated = recipeIngredients.filter(ingredient => {
@@ -232,12 +232,12 @@ const RecipeEdit = ({ onItemDelete }) => {
           <div
             className={styles.ingredientAdd}
             onClick={_ => {
-              if (ingredientValue.quantity === '' || ingredientValue.name === '') { return }
+              if (ingredientValue.amount === '' || ingredientValue.name === '') { return }
               setRecipeIngredients([...recipeIngredients, ingredientValue])
               setIngredientValue({
                 name: '',
                 id: null,
-                quantity: '',
+                amount: '',
                 measurement_unit: ''
               })
             }}

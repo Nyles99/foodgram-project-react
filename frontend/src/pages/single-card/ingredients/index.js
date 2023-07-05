@@ -7,13 +7,13 @@ const Ingredients = ({ ingredients }) => {
     <div className={styles['ingredients__list']}>
       {ingredients.map(({
         name,
-        quantity,
+        amount,
         measurement_unit
       }) => <p
-        key={`${name}${quantity}${measurement_unit}`}
+        key={`${name}${amount}${measurement_unit}`}
         className={styles['ingredients__list-item']}
       >
-        {name} - {quantity} {measurement_unit}
+        {name} - {amount} {measurement_unit}
       </p>)}
     </div>
   </div>

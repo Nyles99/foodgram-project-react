@@ -897,7 +897,7 @@ components:
           maxLength: 200
           description: 'Единицы измерения'
           example: 'г'
-        quantity:
+        amount:
           type: integer
           description: 'Количество'
           minimum: 1
@@ -1060,18 +1060,18 @@ components:
           items:
             example:
               id: 1123
-              quantity: 10
+              amount: 10
             type: object
             properties:
               id:
                 description: 'Уникальный id'
                 type: integer
-              quantity:
+              amount:
                 description: 'Количество в рецепте'
                 type: integer
             required:
               - id
-              - quantity
+              - amount
         tags:
           description: 'Список id тегов'
           type: array
@@ -1117,13 +1117,13 @@ components:
       type: object
       properties:
         ingredients:
-          description: 'Ошибки в ингредиентах. В приведенном примере в первом и третьем ингредиенте не было ошибок (quantity >= 1), а во втором были.'
-          example: [{},{"quantity":["Убедитесь, что это значение больше либо равно 1."]}, {}]
+          description: 'Ошибки в ингредиентах. В приведенном примере в первом и третьем ингредиенте не было ошибок (amount >= 1), а во втором были.'
+          example: [{},{"amount":["Убедитесь, что это значение больше либо равно 1."]}, {}]
           type: array
           items:
             type: object
             properties:
-              quantity:
+              amount:
                 type: array
                 items:
                   type: string

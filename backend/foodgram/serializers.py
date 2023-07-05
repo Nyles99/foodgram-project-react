@@ -88,7 +88,7 @@ class IngredientRecipeCreationSerializer(ModelSerializer):
 
     class Meta:
         model = RecipeIngredient
-        fields = ('id', 'quantity', 'name', 'measurement_unit')
+        fields = ('id', 'amount', 'name', 'measurement_unit')
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -158,9 +158,9 @@ class RecipeCreateSerializer(ModelSerializer):
                 raise ValidationError({
                     'ingredients': 'Ингредиенты не должны дублироваться!'
                 })
-            if int(item['quantity']) <= 0:
+            if int(item['amount']) <= 0:
                 raise ValidationError({
-                    'quantity': 'Количество должно быть больше нуля!'
+                    'amount': 'Количество должно быть больше нуля!'
                 })
             ingredients_list.append(item['id'])
         return value
@@ -176,7 +176,7 @@ class RecipeCreateSerializer(ModelSerializer):
         RecipeIngredient.objects.bulk_create([RecipeIngredient(
             recipe=recipe,
             ingredient=ingredient['id'],
-            quantity=ingredient['quantity'],
+            amount=ingredient['amount'],
         ) for ingredient in ingredients])
         return recipe
 
