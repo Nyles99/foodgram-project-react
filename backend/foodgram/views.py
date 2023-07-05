@@ -122,7 +122,7 @@ class ShoppingCartView(APIView):
                 user=user, recipe__id=recipe_id
         ).exists():
             return Response(
-                {"Ошибка": "Уже есть в корзине"},
+                {"Ошибка": "Уже есть в корзине!"},
                 status=status.HTTP_400_BAD_REQUEST,
             ) 
         serializer = ShoppingCartSerializer(
