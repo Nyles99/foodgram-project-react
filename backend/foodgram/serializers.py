@@ -6,29 +6,8 @@ from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 from rest_framework import serializers
 
-from users.models import Follow, User
 from foodgram.models import (Ingredient, Recipe, RecipeIngredient, Favorite,
                             ShoppingCart, Tag)
-
-
-class CustomUserSerializer(UserSerializer):
-    """
-    Сериализатор для эндпоинтов
-    me, users и users/id/
-    """
-
-    is_subscribed = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'username', 'first_name',
-                  'last_name', 'is_subscribed')
-
-    def get_is_subscribed(self, obj):
-        request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        return Follow.objects.filter(user=request.user, author=obj.id).exists()
 
 
 class TagSerializer(serializers.ModelSerializer):
