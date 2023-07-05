@@ -130,7 +130,7 @@ class RecipeCreateSerializer(ModelSerializer):
         ingredients = value
         if not ingredients:
             raise ValidationError({
-                'ingredients': 'Добавьте хотя бы один ингредиент!'
+                'ingredients': 'Добавьте хотя бы один ингредиент!!'
             })
         ingredients_list = []
         for item in ingredients:
