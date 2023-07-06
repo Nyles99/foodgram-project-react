@@ -27,7 +27,9 @@ class CustomUserSerializer(UserSerializer):
 
 
 class UserCreateSerializer(UserCreateSerializer):
-    username = serializers.CharField(required=True)
+    username = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all()
+    )
     # email = serializers.EmailField(
     #    validators=[
     #        UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
@@ -53,7 +55,7 @@ class UserCreateSerializer(UserCreateSerializer):
     #   return data
     
     def validate_username(self, data):
-        username = data['username']
+        username = data.get('username')
         if username.lower() == 'me':
             raise serializers.ValidationError(
                 f'Имя пользователя {username} недопустимо. '
