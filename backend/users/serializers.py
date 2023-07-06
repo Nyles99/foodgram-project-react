@@ -27,7 +27,7 @@ class CustomUserSerializer(UserSerializer):
 
 
 class UserCreateSerializer(UserCreateSerializer):
-
+    username = serializers.CharField(required=True)
     # email = serializers.EmailField(
     #    validators=[
     #        UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
@@ -45,7 +45,7 @@ class UserCreateSerializer(UserCreateSerializer):
             fields=('username', 'email')
         )]
 
-    def validate_data(self, data):
+    def validate(self, data):
         if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
             raise serializers.ValidationError(
                 'Неверный формат имени.'
@@ -53,7 +53,7 @@ class UserCreateSerializer(UserCreateSerializer):
         return data
     
     def validate_username(self, data):
-        username = data['username']
+        username = data.get('username')
         if username.lower() == 'me':
             raise serializers.ValidationError(
                 f'Имя пользователя {username} недопустимо. '
