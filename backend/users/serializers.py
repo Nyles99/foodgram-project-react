@@ -24,38 +24,6 @@ class CustomUserSerializer(UserSerializer):
             return False
         return Follow.objects.filter(user=user, author=obj).exists()
 
-    def validate_email(email):
-        email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-        return re.match(email_regex, email)
-
-    def clean_email(self):
-        cleaned_email = super().clean_email(self)
-        if User.objects.filter(
-            email__iexact=cleaned_email.get('email')
-        ).exists():
-            self.fields.add_error(
-                'email', "Эта почта уже зарегистрированна"
-            )
-        return cleaned_email
-
-    def clean_username(self):
-        cleaned_name = super().clean_email(self)
-        if User.objects.filter(
-            username__iexact=cleaned_name.get('username')
-        ).exists():
-            self.fields.add_error(
-                'username', "Этот логин уже зарегистрирован!"
-            )
-        return cleaned_name
-
-    def validate_me(self, data):
-        username = data.get('username')
-        if data.get('username').lower() == 'me':
-            raise serializers.ValidationError(
-                f'Имя пользователя {username} недопустимо. '
-                'Используйте другое имя.')
-        return username
-
 
 class UserCreateSerializer(UserCreateSerializer):
 
@@ -75,6 +43,14 @@ class UserCreateSerializer(UserCreateSerializer):
             raise serializers.ValidationError(
                 'Неверный формат имени.'
             )
+        return data
+    
+    def validate_me(self, data):
+        username = data.get('username')
+        if data.get('username').lower() == 'me':
+            raise serializers.ValidationError(
+                f'Имя пользователя {username} недопустимо. '
+                'Используйте другое имя.')
         return data
 
 

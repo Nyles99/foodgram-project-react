@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from users.pagination import CustomPaginator
 from .serializers import (
-    CustomUserSerializer,
+    CustomUserSerializer, UserCreateSerializer,
     FollowerSerializer
 )
 from .models import Follow
@@ -24,6 +24,11 @@ class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPaginator
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return UserCreateSerializer
+        return CustomUserSerializer
 
     @action( 
         detail=False,
@@ -64,35 +69,3 @@ class CustomUserViewSet(UserViewSet):
                     'Вы не подписаны на этого пользователя.')
             Follow.objects.filter(user=user, author=author).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def validate_email(email):
-        email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-        return re.match(email_regex, email)
-
-    def clean_email(self):
-        cleaned_email = super().clean_email(self)
-        if User.objects.filter(
-            email__iexact=cleaned_email.get('email')
-        ).exists():
-            self.fields.add_error(
-                'email', "Эта почта уже зарегистрированна"
-            )
-        return cleaned_email
-
-    def clean_username(self):
-        cleaned_name = super().clean_email(self)
-        if User.objects.filter(
-            username__iexact=cleaned_name.get('username')
-        ).exists():
-            self.fields.add_error(
-                'username', "Этот логин уже зарегистрирован!"
-            )
-        return cleaned_name
-
-    def validate_me(self, data):
-        username = data.get('username')
-        if data.get('username').lower() == 'me':
-            raise serializers.ValidationError(
-                f'Имя пользователя {username} недопустимо. '
-                'Используйте другое имя.')
-        return username
