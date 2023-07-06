@@ -3,7 +3,8 @@ import statistics
 from djoser.serializers import UserCreateSerializer, UserSerializer 
 from requests import Response
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+from rest_framework.validators import (UniqueTogetherValidator,
+                                       UniqueValidator)
 from rest_framework.authtoken.models import Token
 
 from users.models import Follow, User
@@ -37,6 +38,11 @@ class UserCreateSerializer(UserCreateSerializer):
             queryset=User.objects.all(),
             fields=('username', 'email')
         )]
+        email = serializers.EmailField(
+        validators=[
+            UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
+        ]
+    )
 
     def validate(self, data):
         if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
@@ -47,7 +53,7 @@ class UserCreateSerializer(UserCreateSerializer):
     
     def validate_me(self, data):
         username = data.get('username')
-        if data.get('username').lower() == 'me':
+        if username.lower() == 'me':
             raise serializers.ValidationError(
                 f'Имя пользователя {username} недопустимо. '
                 'Используйте другое имя.')
