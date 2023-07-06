@@ -34,7 +34,7 @@ class CustomUserSerializer(UserSerializer):
             email__iexact=cleaned_email.get('email')
         ).exists():
             self.fields.add_error(
-                'email', "Эта почта уже зарегистрированна"
+                'email', "Эта почта уже зарегистрированна!"
             )
         return cleaned_email
 
