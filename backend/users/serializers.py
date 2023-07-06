@@ -77,6 +77,14 @@ class UserCreateSerializer(UserCreateSerializer):
             )
         return data
 
+    def validate_me(self, data):
+        username = data.get('username')
+        if data.get('username').lower() == 'me':
+            raise serializers.ValidationError(
+                f'Имя пользователя {username} недопустимо. '
+                'Используйте другое имя.')
+        return username
+
 
 class PasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
