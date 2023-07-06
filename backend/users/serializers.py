@@ -28,6 +28,12 @@ class CustomUserSerializer(UserSerializer):
 
 class UserCreateSerializer(UserCreateSerializer):
 
+    # email = serializers.EmailField(
+    #    validators=[
+    #        UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
+    #    ]
+    # )
+
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('id', 'email', 'username', 'first_name', 'last_name',
@@ -38,11 +44,6 @@ class UserCreateSerializer(UserCreateSerializer):
             queryset=User.objects.all(),
             fields=('username', 'email')
         )]
-        # email = serializers.EmailField(
-        # validators=[
-        #    UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
-        # ]
-    # )
 
     def validate(self, data):
         if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
@@ -51,7 +52,7 @@ class UserCreateSerializer(UserCreateSerializer):
             )
         return data
     
-    def validate_me(self, data):
+    def validate_username(self, data):
         username = data.get('username')
         if username.lower() == 'me':
             raise serializers.ValidationError(
