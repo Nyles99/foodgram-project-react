@@ -55,7 +55,7 @@ class UserCreateSerializer(UserCreateSerializer):
     def validate_username(self, data):
         if data.get('username').lower() == 'me':
             raise serializers.ValidationError(
-                f'Имя пользователя me недопустимо! '
+                f'Имя пользователя me недопустимо. '
                 'Используйте другое имя.')
         return data
 
