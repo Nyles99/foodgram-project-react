@@ -25,8 +25,11 @@ class CustomUserViewSet(UserViewSet):
     serializer_class = CustomUserSerializer
     pagination_class = CustomPaginator
 
+    def get_queryset(self):
+        return User.objects.all()
+
     def get_serializer_class(self):
-        if self.request.method == 'GET':
+        if self.request.method in ['POST',]:
             return UserCreateSerializer
         return CustomUserSerializer
 
