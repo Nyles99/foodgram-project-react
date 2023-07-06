@@ -53,7 +53,7 @@ class UserCreateSerializer(UserCreateSerializer):
     #   return data
     
     def validate_username(self, data):
-        username = data('username')
+        username = data['username']
         if username.lower() == 'me':
             raise serializers.ValidationError(
                 f'Имя пользователя {username} недопустимо. '
