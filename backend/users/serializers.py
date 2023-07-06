@@ -38,11 +38,11 @@ class UserCreateSerializer(UserCreateSerializer):
             queryset=User.objects.all(),
             fields=('username', 'email')
         )]
-        email = serializers.EmailField(
-        validators=[
-            UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
-        ]
-    )
+        # email = serializers.EmailField(
+        # validators=[
+        #    UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
+        # ]
+    # )
 
     def validate(self, data):
         if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
