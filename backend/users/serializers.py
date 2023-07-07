@@ -3,8 +3,7 @@ import statistics
 from djoser.serializers import UserCreateSerializer, UserSerializer 
 from requests import Response
 from rest_framework import serializers
-from rest_framework.validators import (UniqueTogetherValidator,
-                                       UniqueValidator)
+from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.authtoken.models import Token
 
 from users.models import Follow, User
@@ -50,13 +49,16 @@ class UserCreateSerializer(UserCreateSerializer):
     #        raise serializers.ValidationError(
     #            'Неверный формат имени.'
     #        )
-    #   return data
+    #    return data
     
-    def validate_username(self, data):
-        if data.get('username').lower() == 'me':
+    def validate_username(self, value):
+        if value.lower() == 'me':
             raise serializers.ValidationError(
-                f'Имя пользователя me недопустимо. '
-                'Используйте другое имя.')
+               f'Имя пользователя me недопустимо. '
+               'Используйте другое имя.')
+        return value
+
+
 
 
 class PasswordSerializer(serializers.Serializer):
