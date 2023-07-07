@@ -95,39 +95,6 @@ class TokenSerializer(serializers.ModelSerializer):
         fields = ("token",)
 
 
-class FollowerSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all()
-    )
-    author = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all()
-    )
-
-    def resubscribe(self, request):
-        if request.method == "GET" or request.method == "POST":
-            if Follow.exists():
-                return Response(
-                    "Вы уже подписаны", status=statistics.HTTP_400_BAD_REQUEST
-                )
-
-    def validate(self, data):
-        user = data.get("user")
-        author = data.get("author")
-        if user == author:
-            raise serializers.ValidationError("На себя подписаться нельзя")
-        return data
-
-    class Meta:
-        fields = ("user", "author")
-        model = Follow
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Follow.objects.all(),
-                fields=["user", "author"],
-            )
-        ]
-
-
 class ShortRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
