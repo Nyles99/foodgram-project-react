@@ -57,7 +57,6 @@ class UserCreateSerializer(UserCreateSerializer):
             raise serializers.ValidationError(
                 f'Имя пользователя me недопустимо. '
                 'Используйте другое имя.')
-        return data
 
 
 class PasswordSerializer(serializers.Serializer):
