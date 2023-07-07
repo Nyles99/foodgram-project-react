@@ -35,7 +35,7 @@ class IngredientViewSet(ListRetrieveMixin):
     serializer_class = IngredientSerializer
     permission_classes = [AllowAny]
     filterset_class = IngredientFilter
- 
+
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Рецепты."""

@@ -1,6 +1,6 @@
 import re
 import statistics
-from djoser.serializers import UserCreateSerializer, UserSerializer 
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from requests import Response
 from rest_framework import serializers
 from rest_framework.validators import (UniqueTogetherValidator,
@@ -14,7 +14,7 @@ from foodgram.models import Recipe
 class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
-    class Meta: 
+    class Meta:
         model = User
         fields = ("id", "username", "email", "first_name",
                   "last_name", 'is_subscribed')
@@ -51,15 +51,13 @@ class UserCreateSerializer(UserCreateSerializer):
                 'Неверный формат имени.'
             )
         return data
-    
+
     def validate_username(self, value):
         if value.lower() == 'me':
             raise serializers.ValidationError(
-               f'Имя пользователя me недопустимо. '
-               'Используйте другое имя.')
+                f'Имя пользователя me недопустимо.'
+                 'Используйте другое имя.')
         return value
-
-
 
 
 class PasswordSerializer(serializers.Serializer):

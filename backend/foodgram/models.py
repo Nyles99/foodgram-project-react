@@ -43,7 +43,7 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(
-        verbose_name="Название ингредиента", max_length=200 
+        verbose_name="Название ингредиента", max_length=200
     )
     measurement_unit = models.CharField(
         verbose_name="Единица измерения", max_length=15
@@ -86,12 +86,12 @@ class Recipe(models.Model):
         Ingredient,
         through="RecipeIngredient",
         related_name="recipes",
-        blank=True 
-    ) 
+        blank=True
+    )
 
     pub_date = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время публикации" 
-    ) 
+        auto_now_add=True, verbose_name="Время публикации"
+    )
     image = models.ImageField()
 
     class Meta:
@@ -151,7 +151,7 @@ class RecipeIngredient(models.Model):
         return self.amount
 
 
-class Favorite(models.Model): 
+class Favorite(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         related_name="favorite",

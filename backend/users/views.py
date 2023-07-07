@@ -1,8 +1,7 @@
-import re
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
-from rest_framework import status, exceptions, serializers
+from rest_framework import status, exceptions
 from rest_framework.permissions import (
     AllowAny,
 )
@@ -11,8 +10,7 @@ from rest_framework.response import Response
 
 from users.pagination import CustomPaginator
 from .serializers import (
-    CustomUserSerializer, UserCreateSerializer,
-    FollowerSerializer
+    CustomUserSerializer, FollowerSerializer
 )
 from .models import Follow
 
@@ -28,23 +26,18 @@ class CustomUserViewSet(UserViewSet):
     def get_queryset(self):
         return User.objects.all()
 
-    #def get_serializer_class(self):
-    #    if self.request.method in ['POST',]:
-    #        return UserCreateSerializer
-    #    return CustomUserSerializer
-
-    @action( 
+    @action(
         detail=False,
         methods=['GET'],
         permission_classes=[AllowAny],
         serializer_class=FollowerSerializer
-    ) 
+    )
     def subscriptions(self, request):
         user = request.user
         favorites = user.followers.all()
         users = User.objects.filter(id__in=[f.author.id for f in favorites])
         paginated_queryset = self.paginate_queryset(users)
-        serializer = self.serializer_class(paginated_queryset, many=True) 
+        serializer = self.serializer_class(paginated_queryset, many=True)
         return self.get_paginated_response(serializer.data)
 
     @action(

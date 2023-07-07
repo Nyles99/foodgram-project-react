@@ -6,7 +6,7 @@ from rest_framework import serializers, exceptions
 from .models import (Favorite, Ingredient, Recipe, ShoppingCart,
                      Tag, RecipeIngredient)
 from users.serializers import CustomUserSerializer
- 
+
 
 class TagSerializer(serializers.ModelSerializer):
 
