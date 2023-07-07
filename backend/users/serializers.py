@@ -70,7 +70,7 @@ class PasswordSerializer(serializers.Serializer):
     def validate(self, data):
         if data['current_password'] == data['new_password']:
             raise serializers.ValidationError(
-                'Пароль не изменился!'
+                'Пароль не изменился.'
             )
         return data
 
