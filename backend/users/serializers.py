@@ -128,34 +128,6 @@ class FollowerSerializer(serializers.ModelSerializer):
         ]
 
 
-class ShowFollowerSerializer(serializers.ModelSerializer):
-    recipes = SpecialRecipeSerializer(many=True, required=True)
-    is_subscribed = serializers.SerializerMethodField("check_if_is_subscribed")
-    recipes_count = serializers.SerializerMethodField("get_recipes_count")
-
-    class Meta:
-        model = User
-        fields = (
-            "email",
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-            "is_subscribed",
-            "recipes",
-            "recipes_count",
-        )
-
-    def check_if_is_subscribed(self, obj):
-        user = self.context.get('request').user
-        return user.is_authenticated and Follow.objects.filter(
-            user=user, author=obj).exists()
-
-    def get_recipes_count(self, obj):
-        count = obj.recipes.all().count()
-        return count
-
-
 class ShortRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
