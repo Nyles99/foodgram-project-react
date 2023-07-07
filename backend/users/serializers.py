@@ -3,7 +3,8 @@ import statistics
 from djoser.serializers import UserCreateSerializer, UserSerializer 
 from requests import Response
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+from rest_framework.validators import (UniqueTogetherValidator,
+                                       UniqueValidator)
 from rest_framework.authtoken.models import Token
 
 from users.models import Follow, User
@@ -27,11 +28,11 @@ class CustomUserSerializer(UserSerializer):
 
 class UserCreateSerializer(UserCreateSerializer):
     username = serializers.CharField(required=True)
-    # email = serializers.EmailField(
-    #    validators=[
-    #        UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
-    #    ]
-    # )
+    email = serializers.EmailField(
+        validators=[
+            UniqueValidator(queryset=User.objects.all(), lookup='iexact'),
+        ]
+    )
 
     class Meta(UserCreateSerializer.Meta):
         model = User
@@ -44,12 +45,12 @@ class UserCreateSerializer(UserCreateSerializer):
             fields=('username', 'email')
         )]
 
-    #def validate(self, data):
-    #    if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
-    #        raise serializers.ValidationError(
-    #            'Неверный формат имени.'
-    #        )
-    #    return data
+    def validate(self, data):
+        if not re.match(r'^[\w.@+-]+', str(data.get('username'))):
+            raise serializers.ValidationError(
+                'Неверный формат имени.'
+            )
+        return data
     
     def validate_username(self, value):
         if value.lower() == 'me':
