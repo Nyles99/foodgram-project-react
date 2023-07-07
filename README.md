@@ -47,5 +47,13 @@ ssh name@ip
 пароль: root
 
 Пользователь:
-Почта: Nylesszpg@gmail.com
-пароль: Yandex01
+Почта: Yandex01@yandex.ru
+пароль: google01
+
+Пользователь:
+Почта: Yandex02@yandex.ru
+пароль: google02
+
+Пользователь:
+Почта: Yandex03@yandex.ru
+пароль: google03
