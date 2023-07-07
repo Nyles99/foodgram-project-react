@@ -161,3 +161,28 @@ class ShortRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    """Сериализатор для подписок."""
+
+    recipes = serializers.SerializerMethodField(read_only=True)
+    recipes_count = serializers.SerializerMethodField(read_only=True)
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
+
+    def get_recipes_count(self, obj):
+        return Recipe.objects.filter(author=obj).count()
+
+    def get_is_subscribed(self, obj):
+        return True
+
+    def get_recipes(self, object):
+        queryset = object.recipes.all()[:3]
+
+        return ShortRecipeSerializer(queryset, many=True).data
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'username', 'first_name',
+                  'last_name', 'is_subscribed',
+                  'recipes', "recipes", 'recipes_count')
