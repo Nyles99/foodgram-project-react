@@ -56,7 +56,7 @@ class UserCreateSerializer(UserCreateSerializer):
         if value.lower() == 'me':
             raise serializers.ValidationError(
                 f'Имя пользователя me недопустимо.'
-                 'Используйте другое имя.')
+                'Используйте другое имя.')
         return value
 
 
