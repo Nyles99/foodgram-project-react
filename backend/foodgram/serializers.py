@@ -1,7 +1,7 @@
 from drf_extra_fields.fields import Base64ImageField
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers, exceptions
+from rest_framework import serializers
 
 from .models import (Favorite, Ingredient, Recipe, ShoppingCart,
                      Tag, RecipeIngredient)
@@ -115,32 +115,32 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 
     def validate_tags(self, tags):
         if not tags:
-            raise exceptions.ValidationError('Должен быть хотя бы один тег.')
+            raise serializers.ValidationError('Должен быть хотя бы один тег.')
         return tags
 
     def validate_ingredients(self, value):
         ingredients = value
         if not ingredients:
-            raise exceptions.ValidationError(
-                'Нужен хотя бы один ингредиент!'
-            )
+            raise serializers.ValidationError({
+                'ingredients': 'Нужен хотя бы один ингредиент!'
+            })
         ingredients_list = []
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredients_list:
-                raise exceptions.ValidationError(
-                    'Ингредиенты не могут повторяться!'
-                )
+                raise serializers.ValidationError({
+                    'ingredients': 'Ингредиенты не могут повторяться!'
+                })
             if int(item['amount']) <= 0:
-                raise exceptions.ValidationError(
-                    'Количество ингредиента должно быть больше 0!'
-                )
+                raise serializers.ValidationError({
+                    'amount': 'Количество ингредиента должно быть больше 0!'
+                })
             ingredients_list.append(ingredient)
         return value
 
     def validate_cooking_time(self, cooking_time):
         if cooking_time <= 0:
-            raise exceptions.ValidationError(
+            raise serializers.ValidationError(
                 'Минимальное время приготовления 1 минута.')
         return cooking_time
 
