@@ -118,22 +118,22 @@ class PostRecipeSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError('Должен быть хотя бы один тег.')
         return tags
 
-    def validate_ingredients(self, value):
-        if not value:
-            raise exceptions.ValidationError(
-                'Должен быть хотя бы один ингредиент.')
-
-        if len(value) != len(set(ingredient['id']
-                                       for ingredient in value)):
+    def validate(self, data):
+        ingredients = data.get('iningredients')
+        if len(ingredients) != len(set(ingredient['id']
+                                       for ingredient in ingredients)):
             raise exceptions.ValidationError(
                 'У рецепка не может быть два одинаковых игредиента.')
-        return value
+        if any(obj['amount'] <= 0 for obj in ingredients):
+            raise exceptions.ValidationError(
+                'Должен быть хотя бы один ингредиент.')        
+        return data
 
-    def validate_cooking_time(self, value):
-        if value <= 0:
+    def validate_cooking_time(self, cooking_time):
+        if cooking_time <= 0:
             raise exceptions.ValidationError(
                 'Минимальное время приготовления 1 минута.')
-        return value
+        return cooking_time
 
     def get_ingredients(self, ingredients):
         for ingredient in ingredients:
