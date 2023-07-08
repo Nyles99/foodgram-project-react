@@ -120,8 +120,8 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         ingredients = data.get('iningredients')
-        if len(ingredients) != len(set(ingredient['id']
-                                       for ingredient in ingredients)):
+        if ingredients != set(ingredient['id']
+                                       for ingredient in ingredients):
             raise exceptions.ValidationError(
                 'У рецепка не может быть два одинаковых игредиента.')
         if any(obj['amount'] <= 0 for obj in ingredients):
