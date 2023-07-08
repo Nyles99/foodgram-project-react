@@ -129,11 +129,11 @@ class PostRecipeSerializer(serializers.ModelSerializer):
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredients_list:
                 raise exceptions.ValidationError(
-                    'ingredients': 'Ингредиенты не могут повторяться!'
+                    'Ингредиенты не могут повторяться!'
                 )
             if int(item['amount']) <= 0:
                 raise exceptions.ValidationError(
-                    'amount': 'Количество ингредиента должно быть больше 0!'
+                    'Количество ингредиента должно быть больше 0!'
                 )
             ingredients_list.append(ingredient)
         return value
