@@ -122,7 +122,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
         ingredients = value
         if not ingredients:
             raise exceptions.ValidationError(
-                'ingredients': 'Нужен хотя бы один ингредиент!'
+                'Нужен хотя бы один ингредиент!'
             )
         ingredients_list = []
         for item in ingredients:
