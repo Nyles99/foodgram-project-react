@@ -121,20 +121,20 @@ class PostRecipeSerializer(serializers.ModelSerializer):
     def validate_ingredients(self, value):
         ingredients = value
         if not ingredients:
-            raise serializers.ValidationError({
-                'ingredients': 'Нужен хотя бы один ингредиент!'
-            })
+            raise serializers.ValidationError(
+                'Нужен хотя бы один ингредиент!'
+            )
         ingredients_list = []
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredients_list:
-                raise serializers.ValidationError({
-                    'ingredients': 'Ингредиенты не могут повторяться!'
-                })
+                raise serializers.ValidationError(
+                    'Ингредиенты не могут повторяться!'
+                )
             if int(item['amount']) <= 0:
-                raise serializers.ValidationError({
-                    'amount': 'Количество ингредиента должно быть больше 0!'
-                })
+                raise serializers.ValidationError(
+                    'Количество ингредиента должно быть больше 0!'
+                )
             ingredients_list.append(ingredient)
         return value
 
