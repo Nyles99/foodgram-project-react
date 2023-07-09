@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from rest_framework import viewsets, status, exceptions
 from rest_framework.decorators import action
-from rest_framework.permissions import (AllowAny, IsAuthenticated)
-# from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
 from .constants import DELETE_VALIDATION_ERRORS, POST_VALIDATION_ERRORS
@@ -13,6 +13,7 @@ from .models import (Tag, Ingredient, Recipe,
                      ShoppingCart, Favorite, RecipeIngredient)
 from .mixins import ListRetrieveMixin
 from users.pagination import CustomPaginator
+from .permissions import IsAuthorOrReadOnly
 from .filters import IngredientFilter, RecipeFilter
 from . serializers import (GetRecipeSerializer, PostRecipeSerializer,
                            TagSerializer, IngredientSerializer,
@@ -40,7 +41,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Рецепты."""
 
     queryset = Recipe.objects.all()
-    permission_classes = (AllowAny)
+    permission_classes = [IsAuthorOrReadOnly, IsAuthenticatedOrReadOnly]
     pagination_class = CustomPaginator
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
