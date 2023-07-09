@@ -2,7 +2,6 @@ from drf_extra_fields.fields import Base64ImageField
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from rest_framework.validators import (UniqueTogetherValidator)
 
 from .models import (Favorite, Ingredient, Recipe, ShoppingCart,
                      Tag, RecipeIngredient)
@@ -113,10 +112,6 @@ class PostRecipeSerializer(serializers.ModelSerializer):
     ingredients = ShortIngredientSerializerForRecipe(many=True)
     image = Base64ImageField()
     cooking_time = serializers.IntegerField()
-    validators = [UniqueTogetherValidator(
-            queryset=RecipeIngredient.objects.all(),
-            fields=('ingredients', 'amount')
-        )]
 
     def validate_tags(self, tags):
         if not tags:
@@ -127,18 +122,19 @@ class PostRecipeSerializer(serializers.ModelSerializer):
         ingredients = value
         if not ingredients:
             raise serializers.ValidationError({
-                'ingredients': 'Нужен хотя бы один ингредиент!'
-            })
+                'ingredients': 'Нужен хоть один ингридиент для рецепта'}
+            )
         ingredients_list = []
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredients_list:
                 raise serializers.ValidationError({
-                    'ingredients': 'Ингредиенты не могут повторяться!'
-                })
+                'ingredients': 'повторяется,а не должен'}
+                )
             if int(item['amount']) <= 0:
                 raise serializers.ValidationError({
-                    'amount': 'Количество ингредиента должно быть больше 0!'
+                    'ingredients': ('Убедитесь, что значение количества '
+                                    'ингредиента больше 0')
                 })
             ingredients_list.append(ingredient)
         return value
