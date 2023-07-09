@@ -2,7 +2,7 @@ from drf_extra_fields.fields import Base64ImageField
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+from rest_framework.validators import (UniqueTogetherValidator)
 
 from .models import (Favorite, Ingredient, Recipe, ShoppingCart,
                      Tag, RecipeIngredient)
@@ -114,6 +114,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     cooking_time = serializers.IntegerField()
     validators = [UniqueTogetherValidator(
+            queryset=RecipeIngredient.objects.all(),
             fields=('ingredients', 'amount')
         )]
 
