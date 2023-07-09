@@ -118,11 +118,11 @@ class PostRecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Должен быть хотя бы один тег.')
         return tags
 
-    def validate_ingredients(self, value):
-        ingredients = value
+    def validate(self, data):
+        ingredients = data['ingredients']
         if not ingredients:
             raise serializers.ValidationError({
-                'ingredients': 'Нужен хоть один ингридиент для рецепта'}
+                'ingredients': 'Нужен хоть один ингрtдиент для рецепта'}
             )
         ingredients_list = []
         for item in ingredients:
@@ -137,7 +137,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
                                     'ингредиента больше 0')
                 })
             ingredients_list.append(ingredient)
-        return value
+        return data
 
     def validate_cooking_time(self, cooking_time):
         if cooking_time <= 0:
