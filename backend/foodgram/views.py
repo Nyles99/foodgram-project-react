@@ -5,8 +5,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets, status, exceptions
 from rest_framework.decorators import action
 from rest_framework.permissions import (AllowAny, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly,
-                                        SAFE_METHODS)
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
 from .constants import DELETE_VALIDATION_ERRORS, POST_VALIDATION_ERRORS
@@ -35,7 +34,6 @@ class IngredientViewSet(ListRetrieveMixin):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = [AllowAny]
-    filter_backends = (DjangoFilterBackend,)
     filterset_class = IngredientFilter
 
 
@@ -48,11 +46,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
     def get_serializer_class(self):
-        if self.request.method in SAFE_METHODS:
+        if self.action in ['list', 'retrieve']:
             return GetRecipeSerializer
         return PostRecipeSerializer
 
