@@ -1,7 +1,7 @@
 from drf_extra_fields.fields import Base64ImageField
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
 
 from .models import (Favorite, Ingredient, Recipe, ShoppingCart,
                      Tag, RecipeIngredient)
@@ -121,26 +121,26 @@ class PostRecipeSerializer(serializers.ModelSerializer):
     def validate_ingredients(self, value):
         ingredients = value
         if not ingredients:
-            raise serializers.ValidationError(
-                'Нужен хотя бы один ингредиент!'
-            )
+            raise exceptions.ValidationError({
+                'ingredients': 'Нужен хотя бы один ингредиент!'
+            })
         ingredients_list = []
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredients_list:
-                raise serializers.ValidationError(
-                    'Ингредиенты не могут повторяться!'
-                )
+                raise exceptions.ValidationError({
+                    'ingredients': 'Ингридиенты не могут повторяться!'
+                })
             if int(item['amount']) <= 0:
-                raise serializers.ValidationError(
-                    'Количество ингредиента должно быть больше 0!'
-                )
+                raise exceptions.ValidationError({
+                    'amount': 'Количество ингредиента должно быть больше 0!'
+                })
             ingredients_list.append(ingredient)
         return value
 
     def validate_cooking_time(self, cooking_time):
         if cooking_time <= 0:
-            raise serializers.ValidationError(
+            raise exceptions.ValidationError(
                 'Минимальное время приготовления 1 минута.')
         return cooking_time
 
