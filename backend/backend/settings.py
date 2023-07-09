@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = str(os.getenv('YOUR_SECRET_KEY'))
 
-DEBUG = os.getenv('INFO', default=False)
+DEBUG = os.getenv('INFO', default=True)
 
 
 ALLOWED_HOSTS = [
@@ -82,7 +82,7 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
