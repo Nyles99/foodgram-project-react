@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import UniqueConstraint
 
 
 User = get_user_model()
@@ -95,7 +96,7 @@ class Recipe(models.Model):
     image = models.ImageField()
 
     class Meta:
-        ordering = ["-pub_date"]
+        ordering = ["-id"]
         verbose_name = "Рецепт"
         verbose_name_plural = "Рецепты"
 
@@ -168,9 +169,12 @@ class Favorite(models.Model):
 
     class Meta:
         ordering = ["-cooking_time"]
-        verbose_name = "Список покупок"
-        verbose_name_plural = verbose_name
-        unique_together = ("user", "recipe")
+        verbose_name = "Избранное"
+        verbose_name_plural = "Избранное"
+        constraints = [
+            UniqueConstraint(fields=['user', 'recipe'],
+                             name='unique_favourite')
+        ]
 
     def __str__(self):
         return f"{self.user} added {self.recipe}"
