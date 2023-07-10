@@ -66,12 +66,14 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     author = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="recipes",
         verbose_name="Автор",
     )
     tags = models.ManyToManyField(
-        Tag, through="TagsInRecipe", related_name="recipes"
+        Tag,
+        related_name='recipes',
+        verbose_name='Теги'
     )
     name = models.CharField(max_length=200, verbose_name="Название")
     text = models.TextField(verbose_name="Описание")
@@ -102,28 +104,6 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class TagsInRecipe(models.Model):
-    tag = models.ForeignKey(
-        Tag, verbose_name="Тег в рецепте", on_delete=models.CASCADE
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-    )
-
-    class Meta:
-        verbose_name = "Тег в рецепте"
-        verbose_name_plural = "Теги в рецепте"
-        constraints = [
-            models.UniqueConstraint(
-                fields=('tag', 'recipe'),
-                name='unique_tagsinrecipe'),
-        ]
-
-    def __str__(self):
-        return self.tag
 
 
 class RecipeIngredient(models.Model):
@@ -199,12 +179,11 @@ class ShoppingCart(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='unique_user_recipe_cart'
+                name='unique_shopping_cart'
             )
         ]
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
 
     def __str__(self):
-        return (f'{self.user.username} добавил'
-                f'{self.recipe.name} в список покупок!')
+        return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
