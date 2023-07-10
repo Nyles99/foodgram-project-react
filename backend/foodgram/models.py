@@ -145,45 +145,17 @@ class RecipeIngredient(models.Model):
 
 
 class Favorite(models.Model):
-    recipe = models.ForeignKey(
-        Recipe,
-        related_name="favorites",
-        on_delete=models.CASCADE,
-        verbose_name="Рецепт"
-    )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name="Пользователь",
-        related_name="favorites"
+        related_name='favorites',
+        verbose_name='Пользователь',
     )
-    cooking_time = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["-cooking_time"]
-        verbose_name = "Избранное"
-        verbose_name_plural = "Избранное"
-        constraints = [
-            UniqueConstraint(fields=['user', 'recipe'],
-                             name='unique_favourite')
-        ]
-
-    def __str__(self):
-        return f"{self.user} added {self.recipe}"
-
-
-class ShoppingCart(models.Model):
     recipe = models.ForeignKey(
         Recipe,
-        related_name="shopping_cart",
         on_delete=models.CASCADE,
-        verbose_name="Рецепт",
-    )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name="Пользователь",
-        related_name="shopping_cart"
+        related_name='favorites',
+        verbose_name='Рецепт',
     )
 
     class Meta:
@@ -191,11 +163,41 @@ class ShoppingCart(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='unique_shopping_cart'
+                name='unique_user_recipe_favorite'
+            )
+        ]
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранное'
+
+    def __str__(self):
+        return f'{self.user.username} добавил {self.recipe.name} в избраннное'
+
+
+class ShoppingCart(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='carts',
+        verbose_name='Пользователь'
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='carts',
+        verbose_name='Рецепт'
+    )
+
+    class Meta:
+        ordering = ['-id']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_user_recipe_cart'
             )
         ]
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
 
     def __str__(self):
-        return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
+        return (f'{self.user.username} добавил'
+                f'{self.recipe.name} в список покупок')
