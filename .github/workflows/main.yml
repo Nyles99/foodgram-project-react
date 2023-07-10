@@ -91,7 +91,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
             sudo docker-compose stop
-            sudo docker compose rm backend
+            sudo docker-compose rm backend
             sudo docker-compose rm frontend
             
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
