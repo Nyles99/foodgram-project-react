@@ -14,7 +14,7 @@ DEBUG = os.getenv('INFO', default=True)
 
 ALLOWED_HOSTS = [
     'localhost',
-    '84.201.162.139',
+    '158.160.23.165',
     'backend',
     '*'
 ]
@@ -103,8 +103,10 @@ DJOSER = {
         'user': 'users.serializers.CustomUserSerializer',
     },
     'PERMISSIONS': {
+        'set_username': ['rest_framework.permissions.IsAdminUser'],
+        'user': ['rest_framework.permissions.AllowAny'],
         'user_list': ['rest_framework.permissions.AllowAny'],
-        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
+        'user_delete': ['rest_framework.permissions.IsAdminUser'],
     }
 }
 
