@@ -21,8 +21,8 @@ jobs:
       run: |
         python -m flake8
 
-  build_image_and_push_new_image_to_docker_hub:
-    name: Push backend image to Docker Hub
+  build_and_push_frontend_to_docker_hub:
+    name: Pushing frontend image to Docker Hub
     runs-on: ubuntu-latest
     needs: test_flake8
     if: github.ref == 'refs/heads/master'
@@ -44,7 +44,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend
 
   build_image_and_push_new_image_to_docker_hub:
-    name: Push backend image to Docker Hub
+    name: Push fron image to Docker Hub
     runs-on: ubuntu-latest
     needs: test_flake8
     if: github.ref == 'refs/heads/master'
