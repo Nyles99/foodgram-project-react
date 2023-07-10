@@ -73,7 +73,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Картинка',
-        upload_to='recipes/',
+        upload_to='foodgram/',
         blank=True,
     )
     text = models.TextField(
