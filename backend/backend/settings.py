@@ -103,10 +103,8 @@ DJOSER = {
         'user': 'users.serializers.CustomUserSerializer',
     },
     'PERMISSIONS': {
-        'set_username': ['rest_framework.permissions.IsAdminUser'],
-        'user': ['rest_framework.permissions.AllowAny'],
         'user_list': ['rest_framework.permissions.AllowAny'],
-        'user_delete': ['rest_framework.permissions.IsAdminUser'],
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
     }
 }
 
