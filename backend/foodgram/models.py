@@ -204,7 +204,7 @@ class ShoppingCart(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='unique_user_recipe_cart'
+                name='unique_shopping_cart'
             )
         ]
         verbose_name = 'Список покупок'

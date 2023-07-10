@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import (Ingredient, RecipeIngredient, Recipe,
                             ShoppingCart, Tag)
-from users.models import Follow
+from users.models import Subscribe
 
 from rest_framework import status
 from rest_framework.decorators import action
@@ -58,9 +58,9 @@ class RecipeViewSet(ModelViewSet):
     )
     def favorite(self, request, pk):
         if request.method == 'POST':
-            return self.add_to(Follow, request.user, pk)
+            return self.add_to(Subscribe, request.user, pk)
         else:
-            return self.delete_from(Follow, request.user, pk)
+            return self.delete_from(Subscribe, request.user, pk)
 
     @action(
         detail=True,
