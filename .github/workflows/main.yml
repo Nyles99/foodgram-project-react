@@ -21,8 +21,8 @@ jobs:
       run: |
         python -m flake8
 
-  build_and_push_frontend_to_docker_hub:
-    name: Pushing frontend image to Docker Hub
+  build_image_and_push_new_image_to_docker_hub:
+    name: Push backend image to Docker Hub
     runs-on: ubuntu-latest
     needs: test_flake8
     if: github.ref == 'refs/heads/master'
@@ -68,6 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build_image_and_push_new_image_to_docker_hub
+      - build_and_push_frontend_image_to_docker_hub
     steps:
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -90,7 +91,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
             sudo docker-compose stop
-            sudo docker-compose rm backend
+            sudo docker compose rm backend
             sudo docker-compose rm frontend
             
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
