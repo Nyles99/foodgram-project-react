@@ -130,7 +130,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
         for ingredient in ingredients: 
             if ingredient.get('amount') <= 0: 
                 raise serializers.ValidationError( 
-                    'Добавьте количество ингредиента' 
+                    'Добавьте количество ингредиента!' 
                 ) 
         ingredient_list = [ 
             ingredient['ingredient'].get('id') for ingredient in ingredients 
