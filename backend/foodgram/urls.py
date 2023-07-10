@@ -8,7 +8,7 @@ from .views import (
     TagViewSet,
 )
 
-app_name = 'foodgram'
+app_name = 'api'
 
 router = DefaultRouter()
 
