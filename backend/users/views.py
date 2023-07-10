@@ -12,7 +12,7 @@ from users.pagination import CustomPaginator
 from .serializers import (
     CustomUserSerializer, SubscriptionSerializer
 )
-from .models import Subscribe
+from .models import Follow
 
 
 User = get_user_model()
@@ -33,7 +33,7 @@ class CustomUserViewSet(UserViewSet):
     )
     def subscriptions(self, request):
         user = request.user
-        favorites = user.Subscribeers.all()
+        favorites = user.followers.all()
         users = User.objects.filter(id__in=[f.author.id for f in favorites])
         paginated_queryset = self.paginate_queryset(users)
         serializer = self.serializer_class(paginated_queryset, many=True)
@@ -51,16 +51,16 @@ class CustomUserViewSet(UserViewSet):
             if user == author:
                 raise exceptions.ValidationError(
                     'Подписываться на себя запрещено.')
-            if Subscribe.objects.filter(user=user, author=author).exists():
+            if Follow.objects.filter(user=user, author=author).exists():
                 raise exceptions.ValidationError(
                     'Вы уже подписаны на этого пользователя.')
-            Subscribe.objects.create(user=user, author=author)
+            Follow.objects.create(user=user, author=author)
             serializer = self.get_serializer(author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
-            if not Subscribe.objects.filter(user=user, author=author).exists():
+            if not Follow.objects.filter(user=user, author=author).exists():
                 raise exceptions.ValidationError(
                     'Вы не подписаны на этого пользователя.')
-            Subscribe.objects.filter(user=user, author=author).delete()
+            Follow.objects.filter(user=user, author=author).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)

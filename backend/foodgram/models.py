@@ -53,7 +53,6 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = "Ингредиент"
         verbose_name_plural = "Ингредиенты"
-        ordering = ('pk',)
         constraints = [
             models.UniqueConstraint(
                 fields=('name', 'measurement_unit'),
@@ -87,17 +86,17 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through="RecipeIngredient",
-        related_name="recipes"
+        related_name="recipes",
+        blank=True
     )
 
     pub_date = models.DateTimeField(
         auto_now_add=True, verbose_name="Время публикации"
     )
-    image = models.ImageField(verbose_name='Фото',
-                              upload_to='foodgram/')
+    image = models.ImageField()
 
     class Meta:
-        ordering = ["-pub_date"]
+        ordering = ["-id"]
         verbose_name = "Рецепт"
         verbose_name_plural = "Рецепты"
 
@@ -148,10 +147,6 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = "Количество ингредиента в рецепте."
         verbose_name_plural = "Количество ингредиентов в рецепте."
-        constraints = (
-            UniqueConstraint(fields=('recipe', 'ingredient'),
-                             name='recipeingredient'),
-        )
 
     def __str__(self):
         return self.amount
@@ -160,7 +155,7 @@ class RecipeIngredient(models.Model):
 class Favorite(models.Model):
     recipe = models.ForeignKey(
         Recipe,
-        related_name="favorites",
+        related_name="favorite",
         on_delete=models.CASCADE,
         verbose_name="Рецепт"
     )
@@ -168,7 +163,7 @@ class Favorite(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name="Пользователь",
-        related_name="favorites"
+        related_name="favorite"
     )
     cooking_time = models.DateTimeField(auto_now_add=True)
 
@@ -204,7 +199,7 @@ class ShoppingCart(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='unique_shopping_cart'
+                name='unique_user_recipe_cart'
             )
         ]
         verbose_name = 'Список покупок'

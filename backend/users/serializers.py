@@ -5,7 +5,7 @@ from rest_framework.validators import (UniqueTogetherValidator,
                                        UniqueValidator)
 from rest_framework.authtoken.models import Token
 
-from users.models import Subscribe, User
+from users.models import Follow, User
 from foodgram.models import Recipe
 
 
@@ -21,7 +21,7 @@ class CustomUserSerializer(UserSerializer):
         user = self.context.get('request').user
         if user.is_authenticated:
             return False
-        return Subscribe.objects.filter(user=user, author=obj).exists()
+        return Follow.objects.filter(user=user, author=obj).exists()
 
 
 class UserCreateSerializer(UserCreateSerializer):

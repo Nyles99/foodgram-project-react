@@ -4,8 +4,8 @@ from django.contrib.admin import register
 from . import models
 
 
-@admin.register(models.Subscribe)
-class SubscribeAdmin(admin.ModelAdmin):
+@admin.register(models.Follow)
+class FollowAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'author')
     search_fields = ('user', 'author')
     list_filter = ('user', 'author')
