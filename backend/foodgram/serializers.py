@@ -115,7 +115,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 
     def validate_tags(self, tags):
         if not tags:
-            raise serializers.ValidationError('Должен быть хотя бы один тег.')
+            raise serializers.ValidationError('Должен быть хотя бы один тег!')
         return tags
 
     def validate(self, data):
