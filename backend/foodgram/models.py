@@ -53,6 +53,7 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = "Ингредиент"
         verbose_name_plural = "Ингредиенты"
+        ordering = ('pk',)
         constraints = [
             models.UniqueConstraint(
                 fields=('name', 'measurement_unit'),
@@ -86,17 +87,17 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through="RecipeIngredient",
-        related_name="recipes",
-        blank=True
+        related_name="recipes"
     )
 
     pub_date = models.DateTimeField(
         auto_now_add=True, verbose_name="Время публикации"
     )
-    image = models.ImageField()
+    image = models.ImageField(verbose_name='Фото',
+                              upload_to='foodgram/')
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["-pub_date"]
         verbose_name = "Рецепт"
         verbose_name_plural = "Рецепты"
 
@@ -147,6 +148,10 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = "Количество ингредиента в рецепте."
         verbose_name_plural = "Количество ингредиентов в рецепте."
+        constraints = (
+            UniqueConstraint(fields=('recipe', 'ingredient'),
+                             name='recipeingredient'),
+        )
 
     def __str__(self):
         return self.amount
