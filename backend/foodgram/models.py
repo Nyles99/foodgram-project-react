@@ -44,23 +44,20 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(
-        verbose_name="Название ингредиента", max_length=200
+        'Название',
+        max_length=200,
     )
     measurement_unit = models.CharField(
-        verbose_name="Единица измерения", max_length=15
+        'Единица измерения',
+        max_length=200,
     )
 
     class Meta:
-        verbose_name = "Ингредиент"
-        verbose_name_plural = "Ингредиенты"
-        constraints = [
-            models.UniqueConstraint(
-                fields=('name', 'measurement_unit'),
-                name='unique_ingredient'),
-        ]
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return f"{self.name}, {self.measurement_unit}"
+        return self.name
 
 
 class Recipe(models.Model):
@@ -76,7 +73,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Картинка',
-        upload_to='foodgram/',
+        upload_to='recipes/',
         blank=True,
     )
     text = models.TextField(
@@ -135,13 +132,6 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецепте'
-
-    class Meta:
-        verbose_name = "Количество ингредиента в рецепте."
-        verbose_name_plural = "Количество ингредиентов в рецепте."
-
-    def __str__(self):
-        return self.amount
 
 
 class Favorite(models.Model):
