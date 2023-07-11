@@ -132,14 +132,14 @@ class PostRecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError( 
                     'Добавьте количество ингредиента' 
                 ) 
-        ingredient_list = [ 
-            ingredient['ingredient'].get('id') for ingredient in ingredients 
-        ] 
-        unique_ingredient_list = set(ingredient_list) 
-        if len(ingredient_list) != len(unique_ingredient_list): 
-            raise serializers.ValidationError( 
-                'Ингредиенты должны быть уникальны' 
-            ) 
+        ingredient_list = []
+        for item in ingredients:
+            ingredient = get_object_or_404(Ingredient, id=item['id']) 
+            if ingredient in ingredient_list:
+                raise serializers.ValidationError( 
+                    'Ингредиенты должны быть уникальны' 
+                )
+            ingredient_list.append(ingredient) 
         return data
 
     def get_ingredients(self, ingredients):
