@@ -3,31 +3,31 @@ from django.db import models
 
 
 class User(AbstractUser):
-
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ("username",)
-
     email = models.EmailField(
-        max_length=200,
+        'Электронная почта',
+        max_length=254,
         unique=True,
         blank=False,
-        verbose_name="Почта"
+        null=False,
     )
     username = models.CharField(
-        max_length=200,
+        'Имя пользователя',
+        max_length=150,
         unique=True,
         blank=False,
-        verbose_name='Логин'
+        null=False,
     )
     first_name = models.CharField(
-        max_length=200,
+        'Имя',
+        max_length=150,
         blank=False,
-        verbose_name='Имя'
+        null=False,
     )
     last_name = models.CharField(
-        max_length=200,
+        'Фамилия',
+        max_length=150,
         blank=False,
-        verbose_name='Фамилия'
+        null=False
     )
     password = models.CharField(
         'Пароль',
@@ -37,8 +37,9 @@ class User(AbstractUser):
     )
 
     class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
+        ordering = ['id']
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
     def __str__(self):
         return self.username
